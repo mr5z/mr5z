@@ -43,14 +43,12 @@
 
         /* Blinking cursor */
         .terminal::after {
-            content: '';
+            content: '|';
             display: inline-block;
-            width: 10px;
             height: 1.2em;
-            background-color: #33ff33;
+            color: #33ff33;
             margin-left: 5px;
             animation: blink 1s steps(2, start) infinite;
-            vertical-align: bottom;
         }
 
         @keyframes blink {
@@ -96,8 +94,10 @@
         <div class="terminal mt-4 mx-auto p-4" style="max-width:600px; border-radius:10px; background:#1e1e1e; font-family:monospace; color:#33ff33; text-align:left; position:relative;">
             <div style="white-space: pre; font-family: monospace; background: #1e1e1e; color: #33ff33; padding: 1rem; border-radius: 10px;">
             <span style="color:#ff9f43;">user@mark:~$ pwd</span>
+            <br />
             /home/mark/brain_dump
             <span style="color:#ff9f43;">user@mark:~$ cat > thoughts.log &lt;&lt;EOF</span>
+            <br />
             All my random thoughts go here.
             EOF
             </div>
