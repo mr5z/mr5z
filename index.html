@@ -54,8 +54,8 @@
         }
 
         @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+            0%,50% {opacity:1;}
+            51%,100% {opacity:0;}
         }
 
         .card {
@@ -91,14 +91,18 @@
 <body>
 
     <!-- Header -->
-    <header>
-        <h1>What's on my mind</h1>
-        <div class="terminal">
-          <pre>
-            cat &gt; ~/mind.log &lt;&lt;EOF
-            All my random thoughts go here.
-            EOF
-          </pre>
+    <header class="text-center py-5" style="background: linear-gradient(135deg,#667eea,#764ba2); color:white;">
+        <h1 style="font-weight:700; font-size:2.8rem;">What's on my mind</h1>
+        <div class="terminal mt-4 mx-auto p-4" style="max-width:600px; border-radius:10px; background:#1e1e1e; font-family:monospace; color:#33ff33; text-align:left; position:relative;">
+            <pre style="margin:0; line-height:1.5;">
+                <span style="color:#ff9f43;">user@mark:~$ pwd</span>
+                <span style="color:#33ff33;">/home/mark/brain_dump</span>
+                <span style="color:#ff9f43;">user@mark:~$ cat > thoughts.log &lt;&lt;EOF</span>
+All my random thoughts go here.
+EOF
+            </pre>
+            <!-- blinking cursor -->
+            <span style="position:absolute; bottom:1rem; left:1rem; width:10px; height:1.2em; background:#33ff33; animation:blink 1s steps(2,start) infinite;"></span>
         </div>
     </header>
 
