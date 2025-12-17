@@ -42,12 +42,10 @@
         }
 
         /* Blinking cursor */
-        .terminal::after {
-            content: '|';
+        .cursor {
             display: inline-block;
             height: 1.2em;
             color: #33ff33;
-            margin-left: 5px;
             animation: blink 1s steps(2, start) infinite;
         }
 
@@ -91,15 +89,10 @@
     <!-- Header -->
     <header class="text-center py-5" style="background: linear-gradient(135deg,#667eea,#764ba2); color:white;">
         <h1 style="font-weight:700; font-size:2.8rem;">What's on my mind</h1>
-        <div class="terminal mt-4 mx-auto p-4" style="max-width:600px; border-radius:10px; background:#1e1e1e; font-family:monospace; color:#33ff33; text-align:left; position:relative;">
-            <div style="white-space: pre; font-family: monospace; background: #1e1e1e; color: #33ff33; padding: 1rem; border-radius: 10px;">
-            <span style="color:#ff9f43;">user@mark:~$ pwd</span>
-            <br />
-            /home/mark/brain_dump
-            <span style="color:#ff9f43;">user@mark:~$ cat > thoughts.log &lt;&lt;EOF</span>
-            <br />
-            All my random thoughts go here.
-            EOF
+        <div class="terminal mt-4 mx-auto p-4" style="max-width:600px; background:#1e1e1e; font-family:monospace; color:#33ff33; text-align:left; position:relative;">
+            <div style="font-family: monospace; background: #1e1e1e; color: #33ff33; padding: 1rem; border-radius: 10px;">
+                <div style="color:#ff9f43;">user@mark:~$ cat > thoughts.log</div>
+                <span>All my random thoughts go here.</span><span class="cursor">|</span>
             </div>
         </div>
     </header>
