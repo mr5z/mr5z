@@ -54,7 +54,6 @@
             font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', monospace;
             font-size: 1.1rem;
             font-variant-ligatures: none;
-            padding: 1rem 1.5rem;
             border-radius: 8px;
             display: inline-block;
             position: relative;
@@ -73,7 +72,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding-bottom: 0.5rem;
+            padding: 0.5rem;
             margin-bottom: 0.75rem;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             font-size: 0.85rem;
@@ -91,8 +90,11 @@
         .dot.green  { background: #27c93f; }
         
         .terminal-title {
-            margin-left: auto;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             opacity: 0.6;
+            pointer-events: none;
         }
 
         /* Blinking cursor */
@@ -142,7 +144,7 @@
 
     <!-- Header -->
     <header class="text-center py-5" style="background: linear-gradient(135deg,#667eea,#764ba2); color:white;">
-        <div class="terminal mt-4 mx-auto p-4" style="max-width:600px; background:#1e1e1e; font-family:monospace; color:#33ff33; text-align:left; position:relative;">
+        <div class="terminal" style="max-width:600px; background:#1e1e1e; font-family:monospace; color:#33ff33; text-align:left; position:relative;">
             <div class="terminal-header">
                 <span class="dot red"></span>
                 <span class="dot yellow"></span>
