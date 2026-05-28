@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Clean Break for Linux — What's on my mind</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PY5ZH4VCSK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PY5ZH4VCSK');
+    </script>
+
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: 'Lora', serif;
+            background-color: #f5f4ee;
+            color: #1a1a1a;
+        }
+
+        .site-nav {
+            background: linear-gradient(135deg, #bc6d11, #764ba2);
+            padding: 0.85rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .site-nav a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+        }
+
+        .site-nav a:hover {
+            color: white;
+        }
+
+        .site-nav .separator {
+            color: rgba(255,255,255,0.4);
+            margin: 0 0.5rem;
+        }
+
+        .post-header {
+            max-width: 720px;
+            margin: 3rem auto 1.5rem;
+            padding: 0 1.5rem;
+        }
+
+        .post-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
+        }
+
+        .post-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            background: #f0edf8;
+            color: #764ba2;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin-right: 4px;
+        }
+
+        .post-divider {
+            max-width: 720px;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
+            border: none;
+            border-top: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .post-body {
+            max-width: 720px;
+            margin: 0 auto 4rem;
+            padding: 0 1.5rem;
+            font-size: 1.05rem;
+            line-height: 1.85;
+        }
+
+        .post-body h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #764ba2;
+        }
+
+        .post-body p {
+            margin-bottom: 1.25rem;
+        }
+
+        .post-body strong {
+            font-weight: 600;
+        }
+
+        .post-body em {
+            font-style: italic;
+        }
+
+        .post-body hr {
+            border: none;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            margin: 2.5rem 0;
+        }
+
+        .post-body .footnote {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            font-size: 0.78rem;
+            color: #6c757d;
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: auto;
+        }
+
+        footer a {
+            color: #764ba2;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #bc6d11;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="site-nav">
+        <a href="../index.html">~/thoughts.log</a>
+        <span class="separator">/</span>
+        <span style="color:rgba(255,255,255,0.6);">a-clean-break-for-linux</span>
+    </nav>
+
+    <div class="post-header">
+        <h1>A Clean Break for Linux: Agentic Patch Porting for a Legacy-Free Kernel Fork</h1>
+        <div class="post-meta">May 28, 2026</div>
+        <div>
+            <span class="post-tag">linux</span>
+            <span class="post-tag">ideas</span>
+        </div>
+    </div>
+
+    <hr class="post-divider">
+
+    <article class="post-body">
+
+        <p>I spent an afternoon deep in a debugging rabbit hole — kernel logs, mailing list threads, driver regressions — and somewhere in that mess, a thought occurred to me.</p>
+
+        <p>Linux carries decades of legacy decisions that nobody can cleanly remove because backwards compatibility is treated as sacred. Old interfaces, old subsystems, old assumptions — they stick around because removing them breaks something, somewhere, for someone. There have been attempts to modernize. systemd, PipeWire, Wayland. But these transitions take years, they're never fully clean, and the fragmentation they leave behind is a constant source of pain.</p>
+
+        <p>The root cause is structural: Linux has no single owner. Nobody has the authority to say "this is deprecated, it's gone in 18 months, move on." So bad decisions from 1995 are still partially load-bearing in 2026.</p>
+
+        <p>The obvious answer is a clean-break fork — a kernel that says: no legacy baggage, modern interfaces only. But forks fail because they lose contributors. The reason Linux is good is the thousands of engineers from Intel, AMD, Qualcomm, Google, and Red Hat who upstream their work. A fork starts with a handful of people and hardware support collapses.</p>
+
+        <p>Unless the fork doesn't have to be isolated from mainline at all.</p>
+
+        <p>That's the idea. Here's what actually making it happen would look like.</p>
+
+        <hr>
+
+        <h2>Step 1: Define What "Stupid" Means</h2>
+
+        <p>Before anything else, someone has to do the unglamorous work of cataloguing the legacy decisions worth removing — bad abstractions, redundant subsystems, interfaces that exist purely for historical compatibility, architectural patterns that made sense in 1998 and actively cause problems now.</p>
+
+        <p>This isn't a technical task so much as a political and historical one. It requires people who know the kernel deeply enough to distinguish "legacy but harmless" from "legacy and actively harmful." The output is a concrete list: these things stay, these things go, here is why, here is what replaces them.</p>
+
+        <p>This step is where most clean-break attempts die. It requires conviction and the willingness to be wrong publicly. But without it, everything that follows has no foundation.</p>
+
+        <h2>Step 2: Define the New Architecture and Stick to It</h2>
+
+        <p>Once you know what you're removing, you need a coherent vision of what replaces it. Not a committee document full of compromises — an actual architectural position with clear, enforceable rules about how things are done in the fork.</p>
+
+        <p>The critical part is the last three words: stick to it. The history of Linux modernization efforts is littered with good ideas that got watered down by consensus-seeking until they were indistinguishable from what they replaced. The fork needs a governing body or a person with genuine authority to say "no, that violates the architecture, we are not doing it that way" and have that decision hold.</p>
+
+        <p>This is the hardest step socially. It requires the kind of opinionated, decisive leadership that open source communities structurally resist.</p>
+
+        <h2>Step 3: Build the Agentic Porting System</h2>
+
+        <p>Here's what makes the fork viable instead of just idealistic: it doesn't wall itself off from mainline. It stays connected through a smart porting pipeline.</p>
+
+        <p>When a fix lands in mainline — a driver update, a security patch, a performance improvement — an agentic system watches the commit, determines whether it's relevant to the fork, adapts it to fit the fork's architecture, and queues it for integration. The fork keeps receiving the work of the entire Linux contributor ecosystem without inheriting the legacy those contributors also maintain in mainline.</p>
+
+        <p>Greg Kroah-Hartman's stable kernel tree already does a manual version of this — backporting fixes from mainline to older supported kernels. The missing piece has always been the intelligence layer. A system that understands the semantic intent of a patch, reasons about architectural differences between the two trees, rewrites the patch to fit, and knows when it's out of its depth and needs a human — that's buildable now in a way it wasn't a few years ago.</p>
+
+        <h2>Step 4: Build the Integration Tests — and Decide Who Owns Them</h2>
+
+        <p>The porting system is only as trustworthy as the tests that validate its output. This is non-trivial. Kernel testing is notoriously hard, hardware-in-the-loop testing is expensive, and the surface area is enormous.</p>
+
+        <p>The question of who builds and maintains the test suite is as important as the technical question of how. It can't be purely community-driven or it will have the same coverage gaps that mainline has. It needs dedicated engineering resources — which means institutional backing. A foundation, a consortium of hardware vendors, or a company that has a strong enough interest in the fork succeeding to fund the infrastructure.</p>
+
+        <p>Without this, the agentic system is flying blind and the fork ships regressions.</p>
+
+        <h2>Step 5: Ship It and Hold the Line</h2>
+
+        <p>The final step is the one that actually determines whether any of this matters: shipping it, watching things break, and not flinching. Every clean-break effort faces a moment where the breakage is loud and the pressure to add a compatibility shim "just this once" is enormous. That moment is where the fork either becomes real or quietly becomes another semi-compatible almost-mainline tree that solves nothing.</p>
+
+        <p>Holding the line doesn't mean being reckless. It means having a process for evaluating exceptions that defaults to no, and leadership willing to absorb the criticism that comes with that.</p>
+
+        <hr>
+
+        <p>None of this is technically impossible. The hard parts are political, economic, and organizational. Someone needs the resources, the patience, and frankly the stubbornness to see it through.</p>
+
+        <p>I don't have any of those things right now. But maybe someone reading this does.</p>
+
+        <p class="footnote">— If you have thoughts on this, find me on GitHub.</p>
+
+    </article>
+
+    <footer>
+        <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
