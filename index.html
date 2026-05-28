@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>What's on my mind</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-PY5ZH4VCSK"></script>
     <script>
@@ -22,32 +20,21 @@
         html, body {
             height: 100%;
         }
-        
+
         body {
             display: flex;
             flex-direction: column;
-            font-family: 'Inter', sans-serif;
-            background-color: ##eeede5c7;
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #f5f4ee;
         }
 
         header {
-            background: linear-gradient(120deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #bc6d11, #764ba2);
             color: white;
-            padding: 4rem 1rem;
+            padding: 3rem 1rem;
             text-align: center;
         }
 
-        header h1 {
-            font-weight: 700;
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-        }
-
-        footer {
-            
-        }
-
-        /* Terminal style */
         .terminal {
             width: 100%;
             max-width: 800px;
@@ -62,7 +49,7 @@
             position: relative;
             overflow: hidden;
         }
-    
+
         .terminal-header {
             display: flex;
             align-items: center;
@@ -73,31 +60,12 @@
             font-size: 0.85rem;
             color: #ccc;
         }
-    
+
         .terminal-header .dot { width:12px; height:12px; border-radius:50%; }
-        .dot.red { background:#ff5f56; }
-        .dot.yellow { background:#ffbd2e; }
-        .dot.green { background:#27c93f; }
-    
-        .terminal-title {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0.6;
-            pointer-events: none;
-        }
-    
-        .terminal-body {
-            padding: 1.5rem;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            text-align: left;
-        }
-        
         .dot.red    { background: #ff5f56; }
         .dot.yellow { background: #ffbd2e; }
         .dot.green  { background: #27c93f; }
-        
+
         .terminal-title {
             position: absolute;
             left: 50%;
@@ -106,7 +74,13 @@
             pointer-events: none;
         }
 
-        /* Blinking cursor */
+        .terminal-body {
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: left;
+        }
+
         .cursor {
             display: inline-block;
             height: 1.2em;
@@ -119,45 +93,82 @@
             51%,100% {opacity:0;}
         }
 
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        .post-card {
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.07);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: white;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 1rem;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        .post-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+            color: inherit;
+        }
+
+        .post-card .post-title {
+            font-size: 1.15rem;
+            font-weight: 500;
+            margin-bottom: 0.35rem;
+            color: #1a1a1a;
+        }
+
+        .post-card .post-excerpt {
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .post-card .post-date {
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+
+        .post-card .post-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            background: #f0edf8;
+            color: #764ba2;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin-right: 4px;
+            margin-bottom: 0.5rem;
         }
 
         footer {
             text-align: center;
             padding: 2rem 1rem;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #6c757d;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         footer a {
-            color: #667eea;
+            color: #764ba2;
             text-decoration: none;
         }
 
         footer a:hover {
-            color: #764ba2;
+            color: #bc6d11;
             text-decoration: underline;
         }
-
     </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="text-center py-5" style="background: linear-gradient(135deg, #bc6d11, #764ba2); color:white;">
+    <header>
         <div class="terminal mx-auto">
             <div class="terminal-header">
-                <span class="dot red" title="Close"></span>
-                <span class="dot yellow" title="Minimize"></span>
-                <span class="dot green" title="Maximize"></span>
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
                 <span class="terminal-title">thoughts.log</span>
             </div>
             <div class="terminal-body">
@@ -167,89 +178,61 @@
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container my-5 flex-grow-1"">
+    <main class="container my-5 flex-grow-1">
         <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10">
-                <!-- Blog Post Card -->
-                
-                <div class="card p-4 mb-4" id="measurement">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <h2 class="card-title mb-0">Measurement</h2>
-                        <a href="#measurement" class="small text-muted text-decoration-none">¶</a>
-                    </div>
-                    <p class="card-text">
-                        Measuring accuracy in standard units is impractical
-                    </p>
-                    <p class="text-muted small">Posted on May 21, 2026</p>
-                </div>
+            <div class="col-lg-7 col-md-9">
 
-                <div class="card p-4 mb-4" id="intuition">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <h2 class="card-title mb-0">Intuition</h2>
-                        <a href="#intuition" class="small text-muted text-decoration-none">¶</a>
-                    </div>
-                    <p class="card-text">
-                        Human expertise is essentially a library of pre-run irreducible computations, compressed into intuition
-                    </p>
-                    <p class="text-muted small">Posted on Feb 28, 2026</p>
-                </div>
-                
-                <div class="card p-4 mb-4" id="sentimental-value">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <h2 class="card-title mb-0">Sentimental value</h2>
-                        <a href="#sentimental-value" class="small text-muted text-decoration-none">¶</a>
-                    </div>
-                    <p class="card-text">
-                        How can we quantify sentimental value?
-                    </p>
-                    <p class="text-muted small">Posted on Jan 5, 2026</p>
-                </div>
+                <a href="posts/agentic-kernel-porting.html" class="post-card">
+                    <span class="post-tag">linux</span><span class="post-tag">ideas</span>
+                    <div class="post-title">A Clean Break for Linux: Agentic Patch Porting for a Legacy-Free Kernel Fork</div>
+                    <div class="post-excerpt">Linux carries decades of legacy decisions nobody can cleanly remove. What if a clean-break fork didn't have to be isolated from mainline?</div>
+                    <div class="post-date">May 28, 2026</div>
+                </a>
 
-                <div class="card p-4 mb-4" id="meme-irl">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <h2 class="card-title mb-0">Meme irl</h2>
-                        <a href="#meme-irl" class="small text-muted text-decoration-none">¶</a>
-                    </div>
-                    <p class="card-text">
-                        Ugh, how can we effectively use memes in real life?
-                    </p>
-                    <p class="text-muted small">Posted on Dec 26, 2025</p>
-                </div>
-                
-                <div class="card p-4 mb-4" id="battery">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <h2 class="card-title mb-0">Battery</h2>
-                        <a href="#battery" class="small text-muted text-decoration-none">¶</a>
-                    </div>
-                    <p class="card-text">
-                        The fact that we still haven’t discovered a cost-efficient, small, and long-lasting battery might actually be a good thing.
-                        The universe may be telling us to keep optimizing our devices until we get there.
-                    </p>
-                    <p class="text-muted small">Posted on Dec 26, 2025</p>
-                </div>
-                
-                <div class="card p-4 mb-4" id="paper">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <h2 class="card-title mb-0">Paper</h2>
-                        <a href="#paper" class="small text-muted text-decoration-none">¶</a>
-                    </div>
-                    <p class="card-text">
-                        I was pondering the idea of browsers eventually removing the Print option.
-                        By then, paper will probably be a thing of the past.
-                    </p>
-                    <p class="text-muted small">Posted on Dec 18, 2025</p>
-                </div>
+                <a href="posts/measurement.html" class="post-card">
+                    <div class="post-title">Measurement</div>
+                    <div class="post-excerpt">Measuring accuracy in standard units is impractical.</div>
+                    <div class="post-date">May 21, 2026</div>
+                </a>
+
+                <a href="posts/intuition.html" class="post-card">
+                    <div class="post-title">Intuition</div>
+                    <div class="post-excerpt">Human expertise is essentially a library of pre-run irreducible computations, compressed into intuition.</div>
+                    <div class="post-date">Feb 28, 2026</div>
+                </a>
+
+                <a href="posts/sentimental-value.html" class="post-card">
+                    <div class="post-title">Sentimental value</div>
+                    <div class="post-excerpt">How can we quantify sentimental value?</div>
+                    <div class="post-date">Jan 5, 2026</div>
+                </a>
+
+                <a href="posts/meme-irl.html" class="post-card">
+                    <div class="post-title">Meme irl</div>
+                    <div class="post-excerpt">Ugh, how can we effectively use memes in real life?</div>
+                    <div class="post-date">Dec 26, 2025</div>
+                </a>
+
+                <a href="posts/battery.html" class="post-card">
+                    <div class="post-title">Battery</div>
+                    <div class="post-excerpt">The fact that we still haven't discovered a cost-efficient, small, and long-lasting battery might actually be a good thing.</div>
+                    <div class="post-date">Dec 26, 2025</div>
+                </a>
+
+                <a href="posts/paper.html" class="post-card">
+                    <div class="post-title">Paper</div>
+                    <div class="post-excerpt">I was pondering the idea of browsers eventually removing the Print option. By then, paper will probably be a thing of the past.</div>
+                    <div class="post-date">Dec 18, 2025</div>
+                </a>
+
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer>
         <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a></p>
     </footer>
 
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
