@@ -4,9 +4,7 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/mr5z/mr5z?color=bc6d11&style=flat-square)
 ![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-764ba2?style=flat-square)
 
-> All my random thoughts go here.
-
-A personal page for ideas, observations, and the occasional debugging rabbit hole that turns into a philosophy post.
+I build things and occasionally write down whatever's on my mind.
 
 ## 🔗 [mr5z.github.io/mr5z](https://mr5z.github.io/mr5z)
 
