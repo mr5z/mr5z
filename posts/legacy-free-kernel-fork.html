@@ -209,9 +209,11 @@
 
         <h2>Step 4: Build the Integration Tests and Decide Who Owns Them</h2>
 
-        <p>The porting system is only as trustworthy as the tests that validate its output. Kernel testing is notoriously hard, hardware-in-the-loop testing is expensive, and the surface area is enormous.</p>
+        <p>The porting system is only as trustworthy as the tests that validate its output. Kernel testing is notoriously hard, hardware-in-the-loop testing is expensive, and the surface area is enormous. A test suite comprehensive enough to actually trust the agentic system would likely become a project as large as the kernel itself. That's probably the most underestimated part of this whole idea.</p>
 
-        <p>The question of who builds and maintains the test suite is as important as the technical question of how. It can't be purely community-driven or it will have the same coverage gaps that mainline has. It needs dedicated engineering resources, which means institutional backing: a foundation, a consortium of hardware vendors, or a company with a strong enough interest in the fork succeeding to fund the infrastructure.</p>
+        <p>The question of who builds and maintains it is as important as the technical question of how. It can't be purely community-driven or it will have the same coverage gaps that mainline has. It needs dedicated engineering resources, which means institutional backing: a foundation, a consortium of hardware vendors, or a company with a strong enough interest in the fork succeeding to fund the infrastructure.</p>
+
+        <p>A companion tool worth building alongside this: something that lets anyone contribute test cases without needing kernel development knowledge. Describe the expected behavior, the hardware scenario, the edge case — the tool handles the translation into actual tests. Widening that contributor pool significantly changes the economics of keeping the suite comprehensive over time.</p>
 
         <p>Without this, the agentic system is flying blind and the fork ships regressions.</p>
 
@@ -227,6 +229,8 @@
 
         <p class="footnote">If you have thoughts on this, find me on GitHub.</p>
 
+        <p class="footnote" style="margin-top:2rem;">A few things worth acknowledging. A lot of what looks like "legacy" in the kernel is actually hardware compatibility, vendor workarounds, and ABI guarantees that real systems depend on, not just historical accidents. The agentic porting idea also assumes a level of semantic reasoning about kernel code that current AI systems haven't demonstrated at scale. And none of this touches userspace, where most of the real compatibility burden lives. These are real gaps. This was always a thought experiment, not a roadmap.</p>
+
     </article>
 
     <footer>
@@ -236,4 +240,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
