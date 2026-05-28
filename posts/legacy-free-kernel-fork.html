@@ -171,13 +171,13 @@
 
     <article class="post-body">
 
-        <p>I spent an afternoon deep in a debugging rabbit hole — kernel logs, mailing list threads, driver regressions — and somewhere in that mess, a thought occurred to me.</p>
+        <p>I spent an afternoon deep in a debugging rabbit hole (kernel logs, mailing list threads, driver regressions) and somewhere in that mess, a thought occurred to me.</p>
 
-        <p>Linux carries decades of legacy decisions that nobody can cleanly remove because backwards compatibility is treated as sacred. Old interfaces, old subsystems, old assumptions — they stick around because removing them breaks something, somewhere, for someone. There have been attempts to modernize. systemd, PipeWire, Wayland. But these transitions take years, they're never fully clean, and the fragmentation they leave behind is a constant source of pain.</p>
+        <p>Linux carries decades of legacy decisions that nobody can cleanly remove because backwards compatibility is treated as sacred. Old interfaces, old subsystems, old assumptions: they stick around because removing them breaks something, somewhere, for someone. There have been attempts to modernize. systemd, PipeWire, Wayland. But these transitions take years, they're never fully clean, and the fragmentation they leave behind is a constant source of pain.</p>
 
         <p>The root cause is structural: Linux has no single owner. Nobody has the authority to say "this is deprecated, it's gone in 18 months, move on." So bad decisions from 1995 are still partially load-bearing in 2026.</p>
 
-        <p>The obvious answer is a clean-break fork — a kernel that says: no legacy baggage, modern interfaces only. But forks fail because they lose contributors. The reason Linux is good is the thousands of engineers from Intel, AMD, Qualcomm, Google, and Red Hat who upstream their work. A fork starts with a handful of people and hardware support collapses.</p>
+        <p>The obvious answer is a clean-break fork, a kernel that says: no legacy baggage, modern interfaces only. But forks fail because they lose contributors. The reason Linux is good is the thousands of engineers from Intel, AMD, Qualcomm, Google, and Red Hat who upstream their work. A fork starts with a handful of people and hardware support collapses.</p>
 
         <p>Unless the fork doesn't have to be isolated from mainline at all.</p>
 
@@ -185,51 +185,47 @@
 
         <hr>
 
-        <h2>Step 1: Define What "Stupid" Means</h2>
+        <h2>Step 1: Audit the Legacy</h2>
 
-        <p>Before anything else, someone has to do the unglamorous work of cataloguing the legacy decisions worth removing — bad abstractions, redundant subsystems, interfaces that exist purely for historical compatibility, architectural patterns that made sense in 1998 and actively cause problems now.</p>
+        <p>Before anything else, someone has to do the unglamorous work of cataloguing the legacy decisions worth removing: bad abstractions, redundant subsystems, interfaces that exist purely for historical compatibility, architectural patterns that made sense in 1998 and actively cause problems now.</p>
 
-        <p>This isn't a technical task so much as a political and historical one. It requires people who know the kernel deeply enough to distinguish "legacy but harmless" from "legacy and actively harmful." The output is a concrete list: these things stay, these things go, here is why, here is what replaces them.</p>
+        <p>This isn't purely a technical task. It requires people who know the kernel deeply enough to distinguish "legacy but harmless" from "legacy and actively harmful." The output is a concrete list: these things stay, these things go, here is why, here is what replaces them.</p>
 
-        <p>This step is where most clean-break attempts die. It requires conviction and the willingness to be wrong publicly. But without it, everything that follows has no foundation.</p>
+        <p>Without this foundation, the fork has no clear identity. It's just mainline with a different name.</p>
 
-        <h2>Step 2: Define the New Architecture and Stick to It</h2>
+        <h2>Step 2: Define the New Architecture and Commit to It</h2>
 
-        <p>Once you know what you're removing, you need a coherent vision of what replaces it. Not a committee document full of compromises — an actual architectural position with clear, enforceable rules about how things are done in the fork.</p>
+        <p>Once you know what you're removing, you need a coherent vision of what replaces it. Not a document full of compromises, but an actual architectural position with clear, enforceable rules about how things are done in the fork.</p>
 
-        <p>The critical part is the last three words: stick to it. The history of Linux modernization efforts is littered with good ideas that got watered down by consensus-seeking until they were indistinguishable from what they replaced. The fork needs a governing body or a person with genuine authority to say "no, that violates the architecture, we are not doing it that way" and have that decision hold.</p>
-
-        <p>This is the hardest step socially. It requires the kind of opinionated, decisive leadership that open source communities structurally resist.</p>
+        <p>The history of Linux modernization efforts is littered with good ideas that got watered down by consensus-seeking until they were indistinguishable from what they replaced. The fork needs someone with genuine authority to say "no, that violates the architecture" and have that decision hold. This is the hardest step socially. It requires the kind of opinionated, decisive leadership that open source communities structurally resist.</p>
 
         <h2>Step 3: Build the Agentic Porting System</h2>
 
         <p>Here's what makes the fork viable instead of just idealistic: it doesn't wall itself off from mainline. It stays connected through a smart porting pipeline.</p>
 
-        <p>When a fix lands in mainline — a driver update, a security patch, a performance improvement — an agentic system watches the commit, determines whether it's relevant to the fork, adapts it to fit the fork's architecture, and queues it for integration. The fork keeps receiving the work of the entire Linux contributor ecosystem without inheriting the legacy those contributors also maintain in mainline.</p>
+        <p>When a fix lands in mainline (a driver update, a security patch, a performance improvement), an agentic system watches the commit, determines whether it's relevant to the fork, adapts it to fit the fork's architecture, and queues it for integration. The fork keeps receiving the work of the entire Linux contributor ecosystem without inheriting the legacy those contributors also maintain in mainline.</p>
 
-        <p>Greg Kroah-Hartman's stable kernel tree already does a manual version of this — backporting fixes from mainline to older supported kernels. The missing piece has always been the intelligence layer. A system that understands the semantic intent of a patch, reasons about architectural differences between the two trees, rewrites the patch to fit, and knows when it's out of its depth and needs a human — that's buildable now in a way it wasn't a few years ago.</p>
+        <p>Greg Kroah-Hartman's stable kernel tree already does a manual version of this, backporting fixes from mainline to older supported kernels. The missing piece has always been the intelligence layer: a system that understands the semantic intent of a patch, reasons about architectural differences between the two trees, rewrites the patch to fit, and knows when it needs a human. That's buildable now in a way it wasn't a few years ago.</p>
 
-        <h2>Step 4: Build the Integration Tests — and Decide Who Owns Them</h2>
+        <h2>Step 4: Build the Integration Tests and Decide Who Owns Them</h2>
 
-        <p>The porting system is only as trustworthy as the tests that validate its output. This is non-trivial. Kernel testing is notoriously hard, hardware-in-the-loop testing is expensive, and the surface area is enormous.</p>
+        <p>The porting system is only as trustworthy as the tests that validate its output. Kernel testing is notoriously hard, hardware-in-the-loop testing is expensive, and the surface area is enormous.</p>
 
-        <p>The question of who builds and maintains the test suite is as important as the technical question of how. It can't be purely community-driven or it will have the same coverage gaps that mainline has. It needs dedicated engineering resources — which means institutional backing. A foundation, a consortium of hardware vendors, or a company that has a strong enough interest in the fork succeeding to fund the infrastructure.</p>
+        <p>The question of who builds and maintains the test suite is as important as the technical question of how. It can't be purely community-driven or it will have the same coverage gaps that mainline has. It needs dedicated engineering resources, which means institutional backing: a foundation, a consortium of hardware vendors, or a company with a strong enough interest in the fork succeeding to fund the infrastructure.</p>
 
         <p>Without this, the agentic system is flying blind and the fork ships regressions.</p>
 
         <h2>Step 5: Ship It and Hold the Line</h2>
 
-        <p>The final step is the one that actually determines whether any of this matters: shipping it, watching things break, and not flinching. Every clean-break effort faces a moment where the breakage is loud and the pressure to add a compatibility shim "just this once" is enormous. That moment is where the fork either becomes real or quietly becomes another semi-compatible almost-mainline tree that solves nothing.</p>
+        <p>Every architectural vision eventually meets the reality of people depending on it. The vision either holds or it doesn't. A fork that compromises freely enough eventually becomes indistinguishable from what it was trying to replace.</p>
 
-        <p>Holding the line doesn't mean being reckless. It means having a process for evaluating exceptions that defaults to no, and leadership willing to absorb the criticism that comes with that.</p>
+        <p>The work of keeping a vision intact over time is quieter than the work of defining it, but it's just as important. Consistency has to be treated as a feature, not a constraint. That means being comfortable saying no to things that don't fit, and being comfortable saying "not yet" to things that might fit eventually but aren't ready. Architectural integrity isn't a gate that slows things down. It's what makes the whole thing worth building in the first place.</p>
 
         <hr>
 
-        <p>None of this is technically impossible. The hard parts are political, economic, and organizational. Someone needs the resources, the patience, and frankly the stubbornness to see it through.</p>
+        <p>None of this is technically impossible. The hard parts are organizational and economic. It needs people with the resources and the patience to see it through, and the willingness to make unpopular decisions and stand behind them.</p>
 
-        <p>I don't have any of those things right now. But maybe someone reading this does.</p>
-
-        <p class="footnote">— If you have thoughts on this, find me on GitHub.</p>
+        <p class="footnote">If you have thoughts on this, find me on GitHub.</p>
 
     </article>
 
