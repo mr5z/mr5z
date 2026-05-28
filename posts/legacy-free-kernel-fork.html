@@ -205,7 +205,7 @@
 
         <p>When a fix lands in mainline (a driver update, a security patch, a performance improvement), an agentic system watches the commit, determines whether it's relevant to the fork, adapts it to fit the fork's architecture, and queues it for integration. The fork keeps receiving the work of the entire Linux contributor ecosystem without inheriting the legacy those contributors also maintain in mainline.</p>
 
-        <p>Greg Kroah-Hartman's stable kernel tree already does a manual version of this, backporting fixes from mainline to older supported kernels. The missing piece has always been the intelligence layer: a system that understands the semantic intent of a patch, reasons about architectural differences between the two trees, rewrites the patch to fit, and knows when it needs a human. That's buildable now in a way it wasn't a few years ago.</p>
+        <p>Greg Kroah-Hartman's stable kernel tree already does a manual version of this, backporting fixes from mainline to older supported kernels. The missing piece has always been the intelligence layer: a system that understands the semantic intent of a patch, reasons about architectural differences between the two trees, rewrites the patch to fit, and knows when it needs a human. <a href="https://www.cs.ucr.edu/~zhiyunq/pub/msr24_linux.pdf" target="_blank">Research confirms no such automatic tool exists yet.</a> That's buildable now in a way it wasn't a few years ago.</p>
 
         <h2>Step 4: Build the Integration Tests and Decide Who Owns Them</h2>
 
