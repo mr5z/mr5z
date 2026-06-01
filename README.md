@@ -1,6 +1,5 @@
 # mr5z
 
-![visitors](https://visitor-badge.laobi.icu/badge?page_id=mr5z.mr5z)
 ![GitHub last commit](https://img.shields.io/github/last-commit/mr5z/mr5z?color=bc6d11&style=flat-square)
 ![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-764ba2?style=flat-square)
 
