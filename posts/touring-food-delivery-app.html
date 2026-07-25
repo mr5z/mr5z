@@ -181,7 +181,7 @@ if (result.TryGetValue(out var cartItem))
         <img src="https://github.com/user-attachments/assets/62dffdbc-5406-494a-a451-01e030cd7de3" alt="Checkout">
     </div>
 
-    <p><code>CartTab</code> and the checkout flow are plain pages wired through the same <code>MapPage&lt;Page, ViewModel&gt;()</code> convention as everything else. Nothing is special-cased here despite sitting behind the flyout and tabs.</p>
+    <p><code>CartTab</code> is registered with <code>RegisterPage&lt;CartTabViewModel&gt;()</code>, nested under the tabbed page the same way as the other tabs. Checkout is a separate, ordinary <code>MapPage&lt;CheckoutPage, CheckoutViewModel&gt;()</code> screen reached from the cart.</p>
 
     <h2>Order history</h2>
 
@@ -196,22 +196,30 @@ if (result.TryGetValue(out var cartItem))
         <img src="https://github.com/user-attachments/assets/47893cf5-355d-4cb1-b7a9-244517d1e60e" alt="Settings">
     </div>
 
-    <p>Both are ordinary <code>MapPage</code>-registered pages, wired the same way as any other screen. Adding a plain page doesn't require touching the flyout/tab/popup scaffolding above.</p>
+    <p><code>SearchTab</code> is registered the same way as the other tabs, with <code>RegisterPage&lt;SearchTabViewModel&gt;()</code>. Settings is an ordinary <code>MapPage&lt;SettingsPage, SettingsViewModel&gt;()</code> screen, unrelated to the tab/flyout registration above it.</p>
 
     <h2>Wiring it up</h2>
 
-    <pre><code class="language-csharp">builder
-    .UseMauiApp&lt;App&gt;()
-    .ConfigureMvvmEssentials(registry =&gt;
-    {
-        registry.MapPage&lt;MainHostPage, MainHostViewModel&gt;(isInitial: true)
-            .MapPage&lt;OrdersPage, OrdersViewModel&gt;()
-            .MapPage&lt;ProfilePage, ProfileViewModel&gt;()
-            .MapPage&lt;RestaurantDetailPage, RestaurantDetailViewModel&gt;();
-    })
-    .ConfigureMopups();
+    <pre><code class="language-csharp">// Main FlyoutPage setup - showcases FlyoutHostViewModel
+registry
+    .MapPage&lt;MainHostPage, MainHostViewModel&gt;(isInitial: true)
+        .RegisterPage&lt;MenuViewModel&gt;()
+        .MapPage&lt;MainTabbedPage, MainTabbedViewModel&gt;() // required for initial detail page
+            .RegisterPage&lt;RestaurantsTabViewModel&gt;()
+            .RegisterPage&lt;SearchTabViewModel&gt;()
+            .RegisterPage&lt;CartTabViewModel&gt;();
 
-builder.Services.AddDiscoveredAppStartup();</code></pre>
+// Regular pages - showcases PageViewModel
+registry.MapPage&lt;RestaurantDetailPage, RestaurantDetailViewModel&gt;()
+    .MapPage&lt;ItemDetailPage, ItemDetailViewModel&gt;()
+    .MapPage&lt;OrdersPage, OrdersViewModel&gt;()
+    .MapPage&lt;ProfilePage, ProfileViewModel&gt;()
+    .MapPage&lt;SettingsPage, SettingsViewModel&gt;()
+    .MapPage&lt;CheckoutPage, CheckoutViewModel&gt;();
+
+// Popup - showcases PopupViewModel
+registry.MapPage&lt;AddToCartPopup, AddToCartViewModel&gt;();
+registry.MapPage&lt;ConfirmRemoveItemPopup, ConfirmRemoveItemViewModel&gt;();</code></pre>
 
     <pre><code class="language-bash">dotnet add package Nkraft.MvvmEssentials</code></pre>
 
