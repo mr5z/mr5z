@@ -126,14 +126,14 @@
 
     <img src="https://github.com/user-attachments/assets/a7a200e8-0bf2-4c1c-85f1-4906f60fc40b" alt="Flyout menu">
 
-    <p>This structure is also where the base lifecycle contract earns its keep. MAUI doesn't propagate appearing/disappearing events into a <code>FlyoutPage</code>'s detail content by default, especially when that detail is itself a <code>TabbedPage</code>. Two behaviors fix it, added once at the XAML root:</p>
+    <p>This structure is also where the base lifecycle contract matters most. MAUI doesn't propagate appearing/disappearing events into a <code>FlyoutPage</code>'s detail content by default, especially when that detail is itself a <code>TabbedPage</code>. Two behaviors fix it, added once at the XAML root:</p>
 
     <pre><code class="language-xml">&lt;FlyoutPage.Behaviors&gt;
     &lt;behaviors:FlyoutPresentingBehavior /&gt;
     &lt;behaviors:FlyoutDetailLifecycleBehavior /&gt;
 &lt;/FlyoutPage.Behaviors&gt;</code></pre>
 
-    <p>With that in place, every nested tab ViewModel gets real lifecycle events instead of silence. Worth contrasting with how other frameworks handle this: Prism, for example, exposes lifecycle through interfaces like <code>INavigatedAware</code>, and a ViewModel implements whichever it needs. That works, but if the interface ends up on a ViewModel that isn't actually reachable through a navigable page, the method compiles fine and just never fires, with no error and no warning. Here the interfaces are already implemented on <code>PageViewModel</code> and forwarded to <code>protected virtual</code> methods, so overriding <code>OnNavigatedTo()</code> doesn't depend on remembering to opt in correctly.</p>
+    <p>With that in place, nested tab ViewModels receive appearing/disappearing events reliably. Other frameworks handle this differently: Prism, for example, exposes lifecycle through interfaces like <code>INavigatedAware</code>, and a ViewModel implements whichever it needs. If the interface ends up on a ViewModel that isn't actually reachable through a navigable page, the method compiles fine and never fires, with no error or warning. Here the lifecycle methods are already implemented on <code>PageViewModel</code> itself, so overriding <code>OnNavigatedTo()</code> works without an extra interface step.</p>
 
     <h2>Restaurants tab</h2>
 
@@ -187,7 +187,7 @@ if (result.TryGetValue(out var cartItem))
 
     <img src="https://github.com/user-attachments/assets/c1e34f05-6599-46b4-b289-c8b64f6354a6" alt="Order History">
 
-    <p>This screen is a decent example of the "once vs. every time" question the lifecycle contract forces you to answer up front. Order history should reflect a checkout that just happened, so a refresh belongs in <code>OnNavigatedTo</code> (fires on every transition into the page) rather than <code>OnInitialized</code> (fires once, ever), the same two-option decision that applied to the restaurants tab above, just with a different answer.</p>
+    <p>This screen illustrates the "once vs. every time" choice from the lifecycle contract above. Order history should reflect a checkout that just happened, so a refresh belongs in <code>OnNavigatedTo</code> (fires on every transition into the page) rather than <code>OnInitialized</code> (fires once, ever). It is the same two-option decision as the restaurants tab, with a different answer.</p>
 
     <h2>Search and settings</h2>
 
@@ -196,7 +196,7 @@ if (result.TryGetValue(out var cartItem))
         <img src="https://github.com/user-attachments/assets/47893cf5-355d-4cb1-b7a9-244517d1e60e" alt="Settings">
     </div>
 
-    <p>Both are ordinary <code>MapPage</code>-registered pages. Nothing new here, which is the point: once the flyout/tab/popup scaffolding above is in place, adding a plain screen doesn't require touching any of it.</p>
+    <p>Both are ordinary <code>MapPage</code>-registered pages, wired the same way as any other screen. Adding a plain page doesn't require touching the flyout/tab/popup scaffolding above.</p>
 
     <h2>Wiring it up</h2>
 
