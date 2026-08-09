@@ -146,15 +146,14 @@
 
     <img src="https://github.com/user-attachments/assets/fbb66be6-9597-4b8a-a285-ebeafafba610" alt="Menu Items">
 
-    <p>Tapping a restaurant navigates with a typed parameter rather than a route string:</p>
+    <p>Tapping a restaurant navigates with a strongly-typed parameter rather than a route string:</p>
 
     <pre><code class="language-csharp">public partial class RestaurantsTabViewModel(INavigationService navigationService) : TabViewModel
 {
     [RelayCommand]
     private async Task OpenRestaurant(Restaurant restaurant)
     {
-        var parameters = new NavigationParameters { { "RestaurantId", restaurant.Id } };
-        await navigationService.NavigateAsync&lt;RestaurantDetailViewModel&gt;(parameters);
+        await navigationService.NavigateAsync(RestaurantDetailViewModel.With(restaurantId: restaurant.Id));
     }
 }</code></pre>
 
@@ -166,8 +165,7 @@
 
     <p>Tapping a menu item opens a popup that hands back a typed result, rather than relying on a callback or shared mutable state:</p>
 
-    <pre><code class="language-csharp">var navParams = new NavigationParameters { { nameof(AddToCartViewModel.Item), menuItem } };
-var result = await _popupService.PresentAsync&lt;AddToCartViewModel, CartItem&gt;(navParams);
+    <pre><code class="language-csharp">var result = await _popupService.PresentAsync(AddToCartViewModel.With(item: menuItem));
 if (result.TryGetValue(out var cartItem))
 {
     _cartService.AddItem(cartItem);
