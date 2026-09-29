@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Little Seed — What's on my mind</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PY5ZH4VCSK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PY5ZH4VCSK');
+    </script>
+
+    <style>
+        /* ---------- site chrome (shared with other posts) ---------- */
+        html, body { height: 100%; }
+        body {
+            display: flex; flex-direction: column;
+            font-family: 'Lora', serif; background-color: #f5f4ee; color: #1a1a1a;
+        }
+        .site-nav {
+            background: linear-gradient(135deg, #bc6d11, #764ba2);
+            padding: 0.85rem 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+        }
+        .site-nav a { color: rgba(255,255,255,0.85); text-decoration: none; }
+        .site-nav a:hover { color: white; }
+        .site-nav .separator { color: rgba(255,255,255,0.4); margin: 0 0.5rem; }
+        .post-header { max-width: 720px; margin: 3rem auto 1.5rem; padding: 0 1.5rem; }
+        .post-header h1 { font-size: 2rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.75rem; }
+        .post-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #888; margin-bottom: 0.5rem; }
+        .post-tag {
+            display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+            background: #f0edf8; color: #764ba2; border-radius: 4px; padding: 2px 8px; margin-right: 4px;
+        }
+        .post-divider { max-width: 720px; margin: 1.5rem auto; padding: 0 1.5rem; border: none; border-top: 1px solid rgba(0,0,0,0.08); }
+        footer { text-align: center; padding: 2rem 1rem; font-size: 0.78rem; color: #6c757d; font-family: 'JetBrains Mono', monospace; margin-top: auto; }
+        footer a { color: #764ba2; text-decoration: none; }
+        footer a:hover { color: #bc6d11; text-decoration: underline; }
+
+        /* ---------- the book (scoped so it doesn't clash with Bootstrap or the chrome) ---------- */
+        .book{
+          --ink:#25213A; --muted:#6B6580; --line:#BDB6CC; --btn:#FBFAF6; --voice:#2F7D77;
+          --shadow:0 18px 40px -22px rgba(37,33,58,.55);
+          max-width:720px;width:100%;margin:0 auto 4rem;padding:0 1.5rem;
+          display:flex;flex-direction:column;align-items:center;gap:clamp(18px,3vw,28px);
+          font-family:"Alegreya",Georgia,"Times New Roman",serif;color:var(--ink);-webkit-font-smoothing:antialiased;
+        }
+        .book .plate{position:relative;width:100%;aspect-ratio:8/5;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);background:#1A1936;cursor:pointer}
+        .book .plate svg{position:absolute;inset:0;width:100%;height:100%;display:block;transition:opacity 1.1s ease}
+        .book .words{min-height:10.5em;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:18px;text-align:center;transition:opacity .3s ease}
+        .book .words.out{opacity:0}
+        .book .words h1{font-family:inherit;font-weight:500;font-size:clamp(2.4rem,7vw,4rem);line-height:1.05;margin:4px 0 0;letter-spacing:-.01em}
+        .book .sub{font-style:italic;color:var(--muted);font-size:clamp(1.1rem,2.4vw,1.3rem);margin:0}
+        .book .text{font-size:clamp(1.25rem,2.6vw,1.6rem);line-height:1.55;max-width:34ch;margin:0}
+        .book .voice{font-style:italic;color:var(--voice)}
+        .book .ans{font-style:italic;color:var(--voice);transition:none}
+        @keyframes dz{to{opacity:0;filter:blur(4px)}}
+        .book .dz{animation:dz 1.8s ease forwards}
+        .book .endnote{font-style:italic;color:var(--muted);font-size:clamp(1rem,2vw,1.1rem);max-width:36ch;margin:0;line-height:1.5}
+        .book .closer{font-size:clamp(1.2rem,2.6vw,1.45rem);line-height:1.6;max-width:34ch;margin:.6em 0 0}
+        @keyframes late{to{opacity:1}}
+        .book .late{opacity:0;animation:late 1.8s ease 3s forwards}
+        .book .late2{opacity:0;animation:late 1.2s ease 5.5s forwards}
+        .book .season{font-style:italic;color:var(--muted);font-size:clamp(1.3rem,3vw,1.8rem);letter-spacing:.02em;margin:.4em 0 0}
+        .book .choices{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 12px;max-width:640px}
+        .book button{font:inherit;color:inherit}
+        .book .choice{background:var(--btn);border:1px solid var(--line);border-radius:14px;padding:.55em 1.2em;font-size:clamp(1.02rem,2.1vw,1.15rem);font-style:italic;cursor:pointer;transition:border-color .2s,transform .2s}
+        .book .choice:hover{border-color:#764ba2}
+        .book .choice:active{transform:translateY(1px)}
+        .book-row{--g:clamp(46px,8vw,60px);width:100%;display:grid;grid-template-columns:var(--g) minmax(0,1fr) var(--g);gap:clamp(8px,2vw,16px);align-items:start}
+        .book-row .words{grid-column:2}
+        .book-nav{grid-column:3;justify-self:end}
+        .book .turn{width:var(--g);height:var(--g);border-radius:50%;border:1px solid var(--line);background:var(--btn);box-shadow:var(--shadow);cursor:pointer;display:grid;place-items:center;transition:border-color .2s}
+        .book .turn:hover{border-color:#764ba2}
+        .book .turn[hidden]{display:grid !important;visibility:hidden}
+        .book .turn svg{width:22px;height:22px}
+        .book :focus-visible{outline:2px solid #764ba2;outline-offset:3px}
+        @keyframes tw{from{opacity:.25}to{opacity:.9}}
+        @keyframes rise{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-320px);opacity:0}}
+        @keyframes fall{from{transform:translate(0,0)}to{transform:translate(50px,560px)}}
+        @keyframes leaf{from{transform:translate(0,0) rotate(0deg)}to{transform:translate(110px,560px) rotate(620deg)}}
+        @keyframes rain{from{transform:translate(0,0)}to{transform:translate(-80px,560px)}}
+        @keyframes fly{0%,100%{opacity:.1;transform:translate(0,0)}50%{opacity:1;transform:translate(9px,-12px)}}
+        @keyframes hum{0%,100%{opacity:.55}50%{opacity:.9}}
+        @keyframes drift{from{transform:translate(0,0)}to{transform:translate(46px,-10px)}}
+        @keyframes flap{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.3)}}
+        @keyframes wag{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
+        @keyframes flow{to{stroke-dashoffset:-52}}
+        .plate .drift{animation:drift ease-in-out infinite alternate}
+        .plate .flap{animation:flap .9s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+        .plate .wag{animation:wag .45s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:100% 100%}
+        .plate .flow{animation:flow 2.8s linear infinite}
+        .plate .tw{animation:tw 3.5s ease-in-out infinite alternate}
+        .plate .spark{animation:rise 7s linear infinite}
+        .plate .fall{animation:fall linear infinite}
+        .plate .leaf{animation:leaf linear infinite;transform-box:fill-box}
+        .plate .rain{animation:rain linear infinite}
+        .plate .fly{animation:fly ease-in-out infinite}
+        .plate .hum{animation:hum 3s ease-in-out infinite}
+        @media (prefers-reduced-motion:reduce){
+          .book .dz{animation:none;opacity:.35}
+          .plate .flow,.plate .tw,.plate .spark,.plate .fall,.plate .leaf,.plate .rain,.plate .fly,.plate .hum,.plate .drift,.plate .flap,.plate .wag{animation:none}
+          .book .late,.book .late2{animation:none;opacity:1}
+          .book .plate svg,.book .words{transition:none}
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="site-nav">
+        <a href="../index.html">~/thoughts.log</a>
+        <span class="separator">/</span>
+        <span style="color:rgba(255,255,255,0.6);">the-little-seed</span>
+    </nav>
+
+    <div class="post-header">
+        <h1>The Little Seed</h1>
+        <div class="post-meta">September 29, 2026</div>
+        <div>
+            <span class="post-tag">story</span>
+            <span class="post-tag">philosophy</span>
+        </div>
+    </div>
+
+    <hr class="post-divider">
+
+    <article class="book">
+        <div class="plate" id="stage" role="img" aria-label=""></div>
+        <div class="book-row">
+            <div class="words" id="words" aria-live="polite"></div>
+            <nav class="book-nav" aria-label="Page turning">
+                <button class="turn" id="next" aria-label="Next page"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4l6 6-6 6"/></svg></button>
+            </nav>
+        </div>
+    </article>
+
+    <footer>
+        <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a></p>
+    </footer>
+
+<script>
+(function(){
+"use strict";
+var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ================= helpers ================= */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function hex(h){return[1,3,5].map(function(i){return parseInt(h.substr(i,2),16);});}
+function mix(a,b,t){var A=hex(a),B=hex(b);return"#"+A.map(function(v,i){return Math.round(v+(B[i]-v)*t).toString(16).padStart(2,"0");}).join("");}
+function f(n){return(+n).toFixed(1);}
+var far=function(x){return 372+14*Math.sin(x/160+1);};
+var mid=function(x){return 404+9*Math.sin(x/115);};
+var fg =function(x){return 470+7*Math.sin(x/85+2);};
+function ridge(fn){var d="M0,500 L0,"+f(fn(0));for(var x=20;x<=800;x+=20)d+=" L"+x+","+f(fn(x));return d+" L800,500 Z";}
+
+/* ================= seasons ================= */
+var PAL={
+ spring:{skyT:"#A9C4E8",skyB:"#F6D3DC",far:"#A8BFA0",mid:"#7C9A78",fg:"#5A7A5E",house:"#8C6F7E",roof:"#6A4E5E",win:"#FFE9B8",winOff:"#6E5C66",fig:"#3A2C38",tree:"blossom",trunk:"#6A4E4E",part:"blossom",sun:{x:640,y:110,r:32,c:"#FFF6E2"},water:"#8FB8C9",wall:"#EAD9DA",floor:"#C9AFA8",tower:"#D6FBF5",cloud:"#FFFFFF",clouds:3,page:"#EDE4EC"},
+ springNight:{skyT:"#1B2244",skyB:"#4A4F78",far:"#2E3552",mid:"#262B40",fg:"#1B1F2E",house:"#23202E",roof:"#1A1722",win:"#F2B45A",winOff:"#2E2A3A",fig:"#100D16",tree:"blossomNight",trunk:"#1A1722",part:"none",stars:1,night:1,moon:{x:640,y:90,r:16},water:"#2A3552",wall:"#2B2638",floor:"#1F1B29",tower:"#BDF3EC",page:"#1A1A30"},
+ summer:{skyT:"#6D8FC7",skyB:"#FAD08A",far:"#8FA36A",mid:"#61803F",fg:"#3F5C2E",house:"#7A5048",roof:"#553530",win:"#FFE2A0",winOff:"#5A4040",fig:"#2A1C1C",tree:"green",trunk:"#4E3528",part:"none",sun:{x:170,y:320,r:46,c:"#FFEAB4"},water:"#6FA6BF",wall:"#F1DFC4",floor:"#C7A67E",tower:"#DFFFF9",cloud:"#FFF3DE",clouds:2,page:"#EEE6D6"},
+ summerNight:{skyT:"#141C3A",skyB:"#3B4C78",far:"#27324A",mid:"#1E2838",fg:"#151C28",house:"#1D1A28",roof:"#15121C",win:"#F2B45A",winOff:"#2C2838",fig:"#0E0B12",tree:"greenNight",trunk:"#15121C",part:"firefly",stars:1,night:1,moon:{x:150,y:90,r:18},water:"#1E2B44",wall:"#2A2638",floor:"#1E1A28",tower:"#BDF3EC",page:"#161A2E"},
+ storm:{skyT:"#3F4A55",skyB:"#8A9794",far:"#55655E",mid:"#3E4D47",fg:"#2A3531",house:"#3D3438",roof:"#2A2226",win:"#EABF6A",winOff:"#3A3438",fig:"#191517",tree:"stormy",trunk:"#231D20",part:"rain",water:"#4F6A70",wall:"#8E8A86",floor:"#5E5852",tower:"#CFF7F1",cloud:"#2F3840",clouds:9,page:"#D9DCDD"},
+ clear:{skyT:"#7FA7D6",skyB:"#E6EFE9",far:"#8FAE9A",mid:"#6C8E78",fg:"#4C6B58",house:"#6E5A60",roof:"#4E3E44",win:"#FFE9B8",winOff:"#5A4A50",fig:"#2A2226",tree:"green",trunk:"#3E3036",part:"none",sun:{x:660,y:90,r:30,c:"#FFFBEA"},water:"#5E9EC0",wall:"#E8E4DC",floor:"#B9AE9E",tower:"#E6FFFB",cloud:"#FFFFFF",clouds:2,page:"#E4EAEC"},
+ autumn:{skyT:"#3C3160",skyB:"#EE9A62",far:"#8A5A48",mid:"#5A3A3A",fg:"#3A2530",house:"#3F2A34",roof:"#2B1C24",win:"#F5B55A",winOff:"#4A3440",fig:"#1E1218",tree:"autumn",trunk:"#2B1C24",part:"leaf",sun:{x:120,y:372,r:42,c:"#FFC07A"},water:"#5A6E8A",wall:"#E4C4A8",floor:"#9E7058",tower:"#D8FFF8",cloud:"#6A4A6A",clouds:2,night:1,page:"#EADCD0"},
+ endless:{skyT:"#DCE9F0",skyB:"#F4F7F2",far:"#CBD8CD",mid:"#B3C6B6",fg:"#9DB3A1",house:"#A7B2AE",roof:"#8E9A96",win:"#EEF2EE",winOff:"#8A9490",fig:"#6C7876",tree:"perfect",trunk:"#8E9A96",part:"none",water:"#C9DEE6",wall:"#EDF1EE",floor:"#D4DDD6",tower:"#FFFFFF",flat:1,page:"#EEF1EE"},
+ snowday:{skyT:"#9EC3E6",skyB:"#EEF4F9",far:"#E3EBF2",mid:"#D3DEE8",fg:"#C2CFDC",house:"#7C6A78",roof:"#F4F7FA",win:"#FFE9B8",winOff:"#6A5A66",fig:"#2E2A36",tree:"bare",trunk:"#5E4E5A",part:"snow",snowy:1,sun:{x:640,y:100,r:30,c:"#FFFBEA"},water:"#8FB8C9",wall:"#EEF1F4",floor:"#C9CFD8",tower:"#E6FFFB",cloud:"#FFFFFF",clouds:2,page:"#EEF1F4"},
+ thaw:{skyT:"#6A7390",skyB:"#D9C7C0",far:"#A8ADB0",mid:"#8C9396",fg:"#6E7478",house:"#4A4650",roof:"#3A3640",win:"#EAC27A",winOff:"#4A4650",fig:"#23202A",tree:"bare",trunk:"#3A3640",part:"none",water:"#7A8CA0",wall:"#B8B2B0",floor:"#8A8480",tower:"#E6FFFB",cloud:"#9AA0AE",clouds:6,page:"#DEDBDE"},
+ winter:{skyT:"#101834",skyB:"#44557C",far:"#C3CEDD",mid:"#A9B7C9",fg:"#8D9BB0",house:"#2B2A3C",roof:"#E6ECF4",win:"#F2B45A",winOff:"#3C3B50",fig:"#141322",tree:"bare",trunk:"#2B2A3C",part:"snow",snowy:1,stars:1,night:1,moon:{x:170,y:84,r:15},water:"#2B3A5A",wall:"#3A3A50",floor:"#2A2A3A",tower:"#BDF3EC",page:"#141828"},
+ after:{skyT:"#1B1C40",skyB:"#8EDBD3",far:"#B6C6D6",mid:"#98A9BD",fg:"#7C8DA4",house:"#262538",roof:"#DDE6F0",win:"#F2B45A",winOff:"#35344A",fig:"#121120",tree:"bare",trunk:"#262538",part:"snow",snowy:1,stars:1,night:1,water:"#2B3A5A",wall:"#34344A",floor:"#26263A",tower:"#BDF3EC",page:"#131426"}
+};
+
+/* ================= fixed world ================= */
+var R=rng(11),i;
+var STARS=[];for(i=0;i<80;i++)STARS.push({x:R()*800,y:R()*310,r:.5+R()*1.1,tw:R()<.35,d:(R()*4).toFixed(2)});
+var LIGHTS=[];for(i=0;i<170;i++)LIGHTS.push({x:8+R()*784,y:10+R()*340,r:.9+R()*2.2,halo:R()<.18});
+LIGHTS.sort(function(a,b){return Math.hypot(a.x-620,a.y-340)-Math.hypot(b.x-620,b.y-340);});
+var HX=[30,80,130,182,236,290,345,400,452,505,660,710,758],HOME=5;
+var HOUSES=HX.map(function(x){return{x:x,w:32+R()*14,h:26+R()*16};});
+var RANK=[HOME];HX.map(function(_,i){return i;}).filter(function(i){return i!==HOME;}).map(function(i){return[i,R()];}).sort(function(a,b){return a[1]-b[1];}).forEach(function(p){RANK.push(p[0]);});
+var TREES=[{x:56,s:1},{x:156,s:.9},{x:262,s:1.05},{x:372,s:.85},{x:478,s:1},{x:688,s:.95},{x:736,s:1.1}];
+var TOWERS=[];for(i=0;i<14;i++)TOWERS.push({x:525+R()*260,w:8+R()*14,h:90+R()*200});
+var SPARKS=[];for(i=0;i<26;i++)SPARKS.push({x:500+R()*290,y:220+R()*140,r:1+R()*1.8,d:(R()*7).toFixed(2)});
+var CLOUDS=[];for(i=0;i<9;i++)CLOUDS.push({x:R()*820-10,y:30+R()*170,w:70+R()*110});
+var PARTS=[];for(i=0;i<46;i++)PARTS.push({x:R()*820-10,y:R()*500,a:R(),b:R(),c:R()});
+
+/* ================= shared painters ================= */
+function defs(u,pal){
+  return '<defs><linearGradient id="'+u+'k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+pal.skyT+'"/><stop offset="1" stop-color="'+pal.skyB+'"/></linearGradient>'+
+  '<linearGradient id="'+u+'t" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="'+pal.tower+'" stop-opacity=".8"/><stop offset="1" stop-color="'+pal.tower+'" stop-opacity="0"/></linearGradient>'+
+  '<radialGradient id="'+u+'h"><stop offset="0" stop-color="#D6FFF8" stop-opacity=".9"/><stop offset="1" stop-color="#D6FFF8" stop-opacity="0"/></radialGradient>'+
+  '<radialGradient id="'+u+'s"><stop offset="0" stop-color="#FFF1CF" stop-opacity=".8"/><stop offset="1" stop-color="#FFF1CF" stop-opacity="0"/></radialGradient>'+
+  '<radialGradient id="'+u+'w"><stop offset="0" stop-color="#F2B45A" stop-opacity=".55"/><stop offset="1" stop-color="#F2B45A" stop-opacity="0"/></radialGradient>'+
+  '<linearGradient id="'+u+'q" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+pal.water+'"/><stop offset="1" stop-color="'+mix(pal.water,"#0B1020",.7)+'"/></linearGradient></defs>';
+}
+function sky(u,pal,p){
+  var s='<rect width="800" height="500" fill="url(#'+u+'k)"/>', g=p.lights||0;
+  if(pal.sun&&!p.noSun){var S=pal.sun;s+='<circle cx="'+S.x+'" cy="'+S.y+'" r="'+S.r*3.2+'" fill="url(#'+u+'s)"/><circle cx="'+S.x+'" cy="'+S.y+'" r="'+S.r+'" fill="'+S.c+'"/>';}
+  if(pal.moon){var M=pal.moon;s+='<circle cx="'+M.x+'" cy="'+M.y+'" r="'+M.r*3+'" fill="url(#'+u+'s)" opacity=".35"/><circle cx="'+M.x+'" cy="'+M.y+'" r="'+M.r+'" fill="#F4EEDC"/>';}
+  if(pal.stars){var so=.85*(1-g*.75);STARS.forEach(function(t){s+='<circle cx="'+f(t.x)+'" cy="'+f(t.y)+'" r="'+t.r.toFixed(2)+'" fill="#FFF" opacity="'+so.toFixed(2)+'"'+(t.tw?' class="tw" style="animation-delay:-'+t.d+'s"':'')+'/>';});}
+  var n=Math.round(g*LIGHTS.length);
+  for(var i=0;i<n;i++){var L=LIGHTS[i];if(L.halo)s+='<circle cx="'+f(L.x)+'" cy="'+f(L.y)+'" r="'+f(L.r*5)+'" fill="url(#'+u+'h)" opacity=".5"/>';s+='<circle cx="'+f(L.x)+'" cy="'+f(L.y)+'" r="'+L.r.toFixed(2)+'" fill="#E4FFFA"/>';}
+  if(g>0)s+='<ellipse cx="620" cy="390" rx="440" ry="160" fill="url(#'+u+'h)" opacity="'+(g*.5).toFixed(2)+'"/>';
+  if(p.web){var tips=LIGHTS.filter(function(L){return L.halo;}).slice(0,16);tips.forEach(function(L,i){var sx=p.webX==null?600:p.webX;
+    s+='<path d="M'+sx+',-10 Q'+f((sx+L.x)/2+(i%2?40:-40))+','+f(L.y*.2)+' '+f(L.x)+','+f(L.y)+'" stroke="#8EDBD3" stroke-width="'+(1.6-i*.05).toFixed(2)+'" fill="none" opacity="'+(.32*p.web).toFixed(2)+'"/><circle cx="'+f(L.x)+'" cy="'+f(L.y)+'" r="4" fill="#6FD3B0" opacity="'+(.6*p.web).toFixed(2)+'"/>';});}
+  if(pal.clouds){CLOUDS.slice(0,pal.clouds).forEach(function(c){var o=pal.part==="rain"?.95:.55;
+    s+='<g fill="'+pal.cloud+'" opacity="'+o+'"><ellipse cx="'+f(c.x)+'" cy="'+f(c.y)+'" rx="'+f(c.w/2)+'" ry="'+f(c.w/7)+'"/><ellipse cx="'+f(c.x-c.w/6)+'" cy="'+f(c.y-c.w/10)+'" rx="'+f(c.w/4)+'" ry="'+f(c.w/7)+'"/><ellipse cx="'+f(c.x+c.w/7)+'" cy="'+f(c.y-c.w/12)+'" rx="'+f(c.w/5)+'" ry="'+f(c.w/8)+'"/></g>';});}
+  return s;
+}
+function particles(kind,region){
+  if(!kind||kind==="none")return"";var s="",n={blossom:30,leaf:26,snow:46,rain:46,firefly:24}[kind];
+  PARTS.slice(0,n).forEach(function(q){
+    var y=reduce?q.y:-20-q.b*40, dur, del;
+    if(kind==="blossom"){dur=9+q.c*7;s+='<ellipse class="fall" style="animation-duration:'+dur.toFixed(1)+'s;animation-delay:-'+(q.a*dur).toFixed(1)+'s" cx="'+f(q.x)+'" cy="'+f(y)+'" rx="2.6" ry="1.7" fill="#F7C6D4" opacity=".9"/>';}
+    else if(kind==="leaf"){dur=8+q.c*6;s+='<ellipse class="leaf" style="animation-duration:'+dur.toFixed(1)+'s;animation-delay:-'+(q.a*dur).toFixed(1)+'s" cx="'+f(q.x)+'" cy="'+f(y)+'" rx="4" ry="2" fill="'+(q.b<.5?"#E0793A":"#C9552F")+'"/>';}
+    else if(kind==="snow"){dur=10+q.c*8;s+='<circle class="fall" style="animation-duration:'+dur.toFixed(1)+'s;animation-delay:-'+(q.a*dur).toFixed(1)+'s" cx="'+f(q.x)+'" cy="'+f(y)+'" r="'+(1+q.b*1.8).toFixed(1)+'" fill="#FFFFFF" opacity=".9"/>';}
+    else if(kind==="rain"){dur=.8+q.c*.6;s+='<line class="rain" style="animation-duration:'+dur.toFixed(2)+'s;animation-delay:-'+(q.a*dur).toFixed(2)+'s" x1="'+f(q.x+60)+'" y1="'+f(y)+'" x2="'+f(q.x+58)+'" y2="'+f(y+16)+'" stroke="#D6E2E6" stroke-width="1.2" opacity=".6"/>';}
+    else if(kind==="firefly"){dur=3+q.c*4;var fy=280+q.b*190;s+='<g class="fly" style="animation-duration:'+dur.toFixed(1)+'s;animation-delay:-'+(q.a*dur).toFixed(1)+'s"><circle cx="'+f(q.x)+'" cy="'+f(fy)+'" r="6" fill="#FFE58A" opacity=".2"/><circle cx="'+f(q.x)+'" cy="'+f(fy)+'" r="1.6" fill="#FFF3B0"/></g>';}
+  });
+  return s;
+}
+function sparks(p,pal){if(!p.leave)return"";var sc=pal&&pal.flat?"#7FBFB6":"#E9FFFB";var s="";SPARKS.slice(0,Math.round(SPARKS.length*p.leave)).forEach(function(k){s+='<circle class="spark" style="animation-delay:-'+k.d+'s" cx="'+f(k.x)+'" cy="'+f(k.y)+'" r="'+(k.r*(pal&&pal.flat?1.4:1)).toFixed(2)+'" fill="'+sc+'"/>';});return s;}
+function orb(u,o,day){if(!o)return"";var oo=o.o==null?1:o.o;
+  return (day?'<circle cx="'+o.x+'" cy="'+o.y+'" r="'+(o.r+2.5)+'" fill="#7FD3C8" opacity="'+(.9*oo)+'"/>':'')+'<circle cx="'+o.x+'" cy="'+o.y+'" r="'+o.r*4+'" fill="url(#'+u+'h)" opacity="'+(.8*oo)+'" class="hum"/><circle cx="'+o.x+'" cy="'+o.y+'" r="'+o.r+'" fill="#F4FFFD" opacity="'+oo+'"/>';}
+/* figure: kind, x, groundY, scale, opts */
+function figure(k,x,y,sc,pal,o){
+  o=o||{};var h={toddler:20,child:30,adult:46,old:41}[k],w={toddler:11,child:14,adult:18,old:18}[k];
+  var lean=k==="old"?3:0,top=y-h+10,c=o.glow?"#F2FFFD":pal.fig,s="";
+  if(o.glow)s+='<circle cx="'+x+'" cy="'+(y-h/2)+'" r="'+h*1.3+'" fill="#D6FFF8" opacity=".35"/>';
+  s+='<path d="M'+(x-w/2)+','+y+' L'+(x-w/2+2+lean)+','+(top+6)+' Q'+(x+lean)+','+(top-2)+' '+(x+w/2-2+lean)+','+(top+6)+' L'+(x+w/2)+','+y+' Z" fill="'+c+'"/>';
+  s+='<circle cx="'+(x+lean*1.4)+'" cy="'+(top-5)+'" r="'+(h*.15+1.5)+'" fill="'+c+'"/>';
+  if(o.mira&&!o.glow)s+='<rect x="'+(x-w/2+2+lean)+'" y="'+(top+1)+'" width="'+(w-4)+'" height="3" rx="1.5" fill="#F2B45A"/>';
+  var hx=x+lean*1.4,hy=top-5,hr=h*.15+1.5,wh=o.glow?null:o.who;
+  if(wh==="baker")s+='<rect x="'+(x-w/2+3)+'" y="'+(top+9)+'" width="'+(w-6)+'" height="'+(y-top-11)+'" rx="1.5" fill="#EFE8DA" opacity=".85"/><rect x="'+f(hx-hr*.75)+'" y="'+f(hy-hr*2.2)+'" width="'+f(hr*1.5)+'" height="'+f(hr*1.35)+'" fill="#F4F1EA"/><circle cx="'+f(hx)+'" cy="'+f(hy-hr*2.2)+'" r="'+f(hr*.95)+'" fill="#F4F1EA"/>';
+  if(wh==="hale")s+='<circle cx="'+f(hx-hr*.85)+'" cy="'+f(hy-hr*.45)+'" r="'+f(hr*.5)+'" fill="'+c+'"/><rect x="'+(x-w/2+1)+'" y="'+(top+2)+'" width="'+(w-2)+'" height="5" rx="2" fill="#3E9C94"/><path d="M'+(x+w/2-5)+','+(top+5)+' l4,11 l-5,0 Z" fill="#3E9C94"/>';
+  if(wh==="wim")s+='<ellipse cx="'+f(hx+.5)+'" cy="'+f(hy-hr*.55)+'" rx="'+f(hr*1.05)+'" ry="'+f(hr*.5)+'" fill="#7A6552"/><ellipse cx="'+f(hx+hr*.85)+'" cy="'+f(hy-hr*.3)+'" rx="'+f(hr*.55)+'" ry="'+f(hr*.18)+'" fill="#7A6552"/><circle cx="'+f(hx+hr*.55)+'" cy="'+f(hy+hr*.05)+'" r="'+f(hr*.3)+'" fill="none" stroke="#F4EEDC" stroke-width=".8"/>';
+  if(wh==="sol")s+='<rect x="'+(x-w/2+2+lean)+'" y="'+(top+1)+'" width="'+(w-4)+'" height="3" rx="1.5" fill="#7FB8E6"/><rect x="'+(x+w/2-5+lean)+'" y="'+(top+2)+'" width="3" height="9" rx="1" fill="#7FB8E6"/>';
+  if(k==="old")s+='<line x1="'+(x+w/2+4)+'" y1="'+(top+14)+'" x2="'+(x+w/2+7)+'" y2="'+y+'" stroke="'+c+'" stroke-width="2" stroke-linecap="round"/>';
+  return '<g transform="translate('+x+','+y+') scale('+sc+') translate('+(-x)+','+(-y)+')"'+(o.op?' opacity="'+o.op+'"':'')+'>'+s+'</g>';
+}
+function tree(t,y,pal){
+  var x=t.x,s="",k=pal.tree,sz=k==="perfect"?1:t.s,h=26*sz,r=15*sz;
+  s+='<rect x="'+(x-2)+'" y="'+f(y-h)+'" width="4" height="'+f(h+4)+'" fill="'+pal.trunk+'"/>';
+  if(k==="bare"){s+='<path d="M'+x+','+f(y-h*.6)+' l-9,-12 M'+x+','+f(y-h*.8)+' l8,-12 M'+x+','+f(y-h)+' l-3,-12" stroke="'+pal.trunk+'" stroke-width="2" fill="none" stroke-linecap="round"/>';
+    if(pal.snowy)s+='<path d="M'+(x-10)+','+f(y-h*.6-12)+' l5,0 M'+(x+6)+','+f(y-h*.8-12)+' l5,0" stroke="#EEF3FA" stroke-width="2.4" stroke-linecap="round"/>';return s;}
+  var col={blossom:"#E7B3C4",blossomNight:"#3A3048",green:"#5E7F3E",greenNight:"#1B2733",stormy:"#3F5A48",autumn:"#C9612F",perfect:"#9FB7A3"}[k];
+  s+='<circle cx="'+x+'" cy="'+f(y-h-r*.6)+'" r="'+f(r)+'" fill="'+col+'"/>';
+  if(k==="blossom")s+='<circle cx="'+(x-5*sz)+'" cy="'+f(y-h-r*.9)+'" r="'+f(3*sz)+'" fill="#F9DCE6"/><circle cx="'+(x+6*sz)+'" cy="'+f(y-h-r*.4)+'" r="'+f(2.5*sz)+'" fill="#F9DCE6"/>';
+  if(k==="autumn")s+='<circle cx="'+(x+5*sz)+'" cy="'+f(y-h-r*.9)+'" r="'+f(5*sz)+'" fill="#E8973F"/>';
+  return s;
+}
+function axe(x,y,glow,sc){sc=sc||1;
+  var s=(glow?'<circle cx="'+(x-6)+'" cy="'+(y-32)+'" r="16" fill="#D6FFF8" opacity=".35"/>':'')+'<line x1="'+x+'" y1="'+y+'" x2="'+(x-8)+'" y2="'+(y-38)+'" stroke="'+(glow?"#E6D2A8":"#8A6A4A")+'" stroke-width="2.6" stroke-linecap="round"/><path d="M'+(x-8)+','+(y-39)+' l-12,-4 q-4,8 1,15 l12,-3 Z" fill="'+(glow?"#DFFFF6":"#9AA3AD")+'"/>';
+  return '<g transform="translate('+x+','+y+') scale('+sc+') translate('+(-x)+','+(-y)+')">'+s+'</g>';}
+/* ---- animals (ambient, not characters) ---- */
+function A(body,x,y,sc,fill,cls,dur,del){return(cls?'<g class="'+cls+'" style="animation-duration:'+dur+'s;animation-delay:-'+del+'s">':'<g>')+'<g transform="translate('+f(x)+','+f(y)+') scale('+sc+')" fill="'+fill+'">'+body+'</g></g>';}
+function catSit(c,eyes){return'<ellipse cx="0" cy="-5" rx="4.5" ry="5.5"/><circle cx="2" cy="-12" r="3.3"/><path d="M0,-14 L0.6,-18.5 L2.6,-15 Z M2.4,-15 L4.6,-18.4 L5.2,-13.5 Z"/><path d="M-3.5,-1 C-10,0 -9,-8 -7,-10" fill="none" stroke="'+c+'" stroke-width="1.6" stroke-linecap="round"/>'+(eyes?'<circle cx="3.4" cy="-12.4" r=".7" fill="#F2D36A"/><circle cx="1.2" cy="-12.4" r=".7" fill="#F2D36A"/>':'');}
+function catCurl(c){return'<ellipse cx="0" cy="-5" rx="13" ry="5.5"/><circle cx="10" cy="-6.5" r="4"/><path d="M8,-9.5 L8.8,-14 L11,-10.5 Z M11,-10.2 L13.5,-13.6 L13.8,-8.8 Z"/><path d="M-12,-3 C-16,2 -2,3 6,-1" fill="none" stroke="'+c+'" stroke-width="2.2" stroke-linecap="round"/>';}
+function dogB(c){return'<rect x="-8" y="-11" width="13" height="6" rx="3"/><rect x="-7" y="-6" width="2" height="6" rx=".8"/><rect x="-3.6" y="-6" width="2" height="6" rx=".8"/><rect x="0.6" y="-6" width="2" height="6" rx=".8"/><rect x="3" y="-6" width="2" height="6" rx=".8"/><circle cx="6" cy="-13" r="3.4"/><ellipse cx="9.2" cy="-12.2" rx="2.4" ry="1.5"/><ellipse cx="4.8" cy="-12.4" rx="1.3" ry="2.6"/><path class="wag" d="M-8,-10 C-10,-12 -11,-15 -10,-18" stroke="'+c+'" stroke-width="1.6" fill="none" stroke-linecap="round"/>';}
+function birdF(c){return'<path class="flap" d="M-6,0 Q-3,-4 0,0 Q3,-4 6,0" fill="none" stroke="'+c+'" stroke-width="1.4" stroke-linecap="round"/>';}
+function perchB(){return'<ellipse cx="0" cy="-3.2" rx="3.6" ry="2.6"/><circle cx="2.8" cy="-5.6" r="1.8"/><path d="M4.4,-5.8 l2,0.6 l-2,0.6 Z M-3,-3 l-3.5,1.6 l0.6,-2.6 Z"/>';}
+function frogB(pad){return(pad?'<ellipse cx="0" cy="0" rx="13" ry="3.6" fill="#5E9E6A"/><path d="M0,0 l10,-2.4" stroke="#3E7A4E" stroke-width="1"/>':'')+'<ellipse cx="0" cy="-4" rx="6.5" ry="4"/><ellipse cx="-6" cy="-1.2" rx="3.2" ry="1.4"/><ellipse cx="6" cy="-1.2" rx="3.2" ry="1.4"/><circle cx="-3" cy="-7.5" r="2.2"/><circle cx="3" cy="-7.5" r="2.2"/><circle cx="-3" cy="-7.8" r="1" fill="#F4F1EA"/><circle cx="3" cy="-7.8" r="1" fill="#F4F1EA"/><circle cx="-2.8" cy="-7.8" r=".5" fill="#1A1A1A"/><circle cx="3.2" cy="-7.8" r=".5" fill="#1A1A1A"/>';}
+function fishB(){return'<ellipse cx="0" cy="0" rx="7" ry="3"/><path d="M-6,0 l-5,-3.5 l0,7 Z"/>';}
+function flock(pts,c,sc){var s="";pts.forEach(function(q,i){s+=A(birdF(c),q[0],q[1],sc||1.1,"none","drift",(7+i*1.3).toFixed(1),(i*1.7).toFixed(1));});return s;}
+function dayish(pal){return(!pal.night||pal===PAL.autumn)&&pal.part!=="rain";}
+var BALN=0;
+function balloonG(u,cx,top,W,H,o){o=o||{};var id=u+"bl"+(++BALN),d='M'+(cx-W*.5)+','+(top+H*.4)+' C'+(cx-W*.5)+','+(top-H*.12)+' '+(cx+W*.5)+','+(top-H*.12)+' '+(cx+W*.5)+','+(top+H*.4)+' C'+(cx+W*.5)+','+(top+H*.7)+' '+(cx+W*.2)+','+(top+H*.85)+' '+(cx+W*.14)+','+(top+H)+' L'+(cx-W*.14)+','+(top+H)+' C'+(cx-W*.2)+','+(top+H*.85)+' '+(cx-W*.5)+','+(top+H*.7)+' Z',
+    C=["#F2B45A","#E07A5F","#8EDBD3","#E6C7F0","#9FC3E0","#D98B4B"],s='<clipPath id="'+id+'"><path d="'+d+'"/></clipPath><g clip-path="url(#'+id+')">';
+  for(var i=0;i<6;i++)s+='<rect x="'+f(cx-W*.5+i*W/6)+'" y="'+f(top-H*.1)+'" width="'+f(W/6+.5)+'" height="'+f(H*1.2)+'" fill="'+C[(i*2+1)%6]+'"/>';
+  s+='<path d="M'+(cx-W*.5)+','+f(top+H*.42)+' Q'+cx+','+f(top+H*.5)+' '+(cx+W*.5)+','+f(top+H*.42)+'" stroke="#5A4030" stroke-width="'+f(W*.012)+'" fill="none" stroke-dasharray="'+f(W*.03)+' '+f(W*.02)+'" opacity=".6"/>';
+  s+='<rect x="'+f(cx+W*.08)+'" y="'+f(top+H*.2)+'" width="'+f(W*.14)+'" height="'+f(H*.1)+'" fill="#F4EEDC" transform="rotate(8 '+f(cx+W*.15)+' '+f(top+H*.25)+')"/><rect x="'+f(cx-W*.3)+'" y="'+f(top+H*.55)+'" width="'+f(W*.12)+'" height="'+f(H*.08)+'" fill="#6FA8DC" transform="rotate(-10 '+f(cx-W*.24)+' '+f(top+H*.59)+')"/>';
+  s+='<rect x="'+f(cx-W*.6)+'" y="'+f(top-H*.1)+'" width="'+f(W*1.2)+'" height="'+f(H*1.2)+'" fill="#000000" opacity="'+(o.night?.12:.04)+'"/></g>';
+  if(o.flat)s+='<path d="M'+(cx-W*.3)+','+f(top+H*.3)+' q'+f(W*.1)+','+f(H*.1)+' 0,'+f(H*.25)+' M'+(cx+W*.25)+','+f(top+H*.5)+' q-'+f(W*.1)+','+f(H*.1)+' 0,'+f(H*.2)+'" stroke="#000000" stroke-opacity=".15" stroke-width="'+f(W*.02)+'" fill="none"/>';
+  s+='<rect x="'+f(cx-W*.15)+'" y="'+f(top+H-2)+'" width="'+f(W*.3)+'" height="'+f(H*.03+2)+'" rx="1" fill="#5A4030"/>';
+  return s;}
+function basket(x,y,sc,heads,c){var s='<rect x="-9" y="-12" width="18" height="12" rx="2" fill="#A57A52"/><path d="M-9,-8 L9,-8 M-9,-4 L9,-4 M-5,-12 L-5,0 M0,-12 L0,0 M5,-12 L5,0" stroke="#7A5638" stroke-width=".8"/><rect x="-10" y="-13.5" width="20" height="2.4" rx="1" fill="#7A5638"/>';
+  if(heads)s='<circle cx="-4" cy="-15" r="2.6" fill="'+c+'"/><circle cx="3.5" cy="-14.6" r="2.3" fill="'+c+'"/>'+s;
+  return '<g transform="translate('+x+','+y+') scale('+sc+')">'+s+'</g>';}
+function flyingBalloon(u,b,pal){var x=b.x,y=b.y,W=58,H=78,by=y+H+30,s='';
+  s+='<path d="M'+(x+10)+',470 C'+(x+14)+','+(by+80)+' '+(x+2)+','+(by+30)+' '+x+','+(by+4)+'" stroke="#F2B45A" stroke-width="1.2" fill="none" opacity=".35" stroke-dasharray="2 5"/>';
+  s+='<g transform="rotate(-7 '+x+' '+by+')">';
+  s+='<circle cx="'+x+'" cy="'+(y+H)+'" r="38" fill="url(#'+u+'w)"/>';
+  s+=balloonG(u,x,y,W,H,{night:pal.night});
+  s+='<path d="M'+(x-W*.14)+','+(y+H)+' L'+(x-8)+','+(by-13)+' M'+(x+W*.14)+','+(y+H)+' L'+(x+8)+','+(by-13)+'" stroke="#5A4030" stroke-width=".9"/>';
+  s+='<circle cx="'+x+'" cy="'+(y+H+4)+'" r="3.2" fill="#FFD98A"/><circle cx="'+x+'" cy="'+(y+H+4)+'" r="9" fill="url(#'+u+'w)"/>';
+  s+=basket(x,by,1.25,1,pal.fig)+'</g>';return s;}
+function blocks(x,y,sc){
+  var c=["#F2B45A","#D98B4B","#9FC3E0","#E6C7F0","#F2B45A"],s="";
+  for(var i=0;i<5;i++){var o=[0,2,-1,3,1][i]+i*.6;s+='<rect x="'+(x+o)+'" y="'+(y-(i+1)*9)+'" width="9" height="9" rx="1.2" fill="'+c[i]+'"/>';}
+  return '<g transform="translate('+x+','+y+') scale('+sc+') translate('+(-x)+','+(-y)+')">'+s+'</g>';
+}
+
+
+var CROWN=[];(function(){var r=rng(29);for(var i=0;i<22;i++){var a=r()*Math.PI*2,d=Math.sqrt(r())*.8;CROWN.push({x:Math.cos(a)*d,y:Math.sin(a)*d*.8,r:.28+r()*.24,l:r()<.35});}})();
+var CANOPY=[];(function(){var r=rng(41);for(var x=-40;x<=840;x+=34)CANOPY.push({x:x+r()*16,y:r(),r:38+r()*34,l:r()<.3});})();
+function leafC(pal){return pal.night?"#5FCFAE":"#6FD3B0";}
+function bigTree(u,pal,T,bx,by,sc){
+  if(!T)return"";sc=sc||1;var g=T.g,s="",tc=pal.night?"#221B28":"#5E4738",lc=leafC(pal);
+  if(g<=.12){var h=(22+g*620)*sc;
+    if(T.stake)s+='<line x1="'+(bx+7*sc)+'" y1="'+(by+3)+'" x2="'+(bx+7*sc)+'" y2="'+f(by-h*1.05)+'" stroke="#8A6A4A" stroke-width="'+(2.4*sc)+'" stroke-linecap="round"/><line x1="'+bx+'" y1="'+f(by-h*.55)+'" x2="'+(bx+7*sc)+'" y2="'+f(by-h*.55)+'" stroke="#E8D8B0" stroke-width="'+(1.6*sc)+'"/>';
+    s+='<circle cx="'+bx+'" cy="'+f(by-h)+'" r="'+f(10+g*120)+'" fill="url(#'+u+'h)" opacity=".5" class="hum"/>';
+    s+='<path d="M'+bx+','+by+' C'+(bx-2)+','+f(by-h*.5)+' '+(bx+2)+','+f(by-h*.8)+' '+bx+','+f(by-h)+'" stroke="#4E8A5C" stroke-width="'+f((1.8+g*16)*sc)+'" fill="none" stroke-linecap="round"/>';
+    var lw=(9+g*120)*sc;
+    s+='<ellipse cx="'+f(bx-lw*.6)+'" cy="'+f(by-h)+'" rx="'+f(lw*.65)+'" ry="'+f(lw*.3)+'" fill="'+lc+'" transform="rotate(-25 '+f(bx-lw*.6)+' '+f(by-h)+')"/><ellipse cx="'+f(bx+lw*.6)+'" cy="'+f(by-h-2)+'" rx="'+f(lw*.65)+'" ry="'+f(lw*.3)+'" fill="'+lc+'" transform="rotate(25 '+f(bx+lw*.6)+' '+f(by-h-2)+')"/>';
+    if(g>.06)s+='<ellipse cx="'+bx+'" cy="'+f(by-h-lw*.35)+'" rx="'+f(lw*.3)+'" ry="'+f(lw*.55)+'" fill="#B8F5E1"/>';
+    return s;}
+  var H=(40+g*900)*sc,W=(8+g*60)*sc;
+  if(T.stakeDown)s+='<line x1="'+(bx+16)+'" y1="'+(by+4)+'" x2="'+(bx+48)+'" y2="'+(by-2)+'" stroke="#8A6A4A" stroke-width="3" stroke-linecap="round"/>';
+  for(var i=0;i<5;i++){var yy=by-H*(.42+.11*i),dir=i%2?1:-1,len=H*.24*(1-.12*i);
+    s+='<path d="M'+bx+','+f(yy)+' Q'+f(bx+dir*len*.5)+','+f(yy-len*.2)+' '+f(bx+dir*len)+','+f(yy-len*.55)+'" stroke="'+tc+'" stroke-width="'+f(Math.max(2,W*.2))+'" fill="none" stroke-linecap="round"/>';}
+  s+='<path d="M'+f(bx-W*.9)+','+(by+2)+' Q'+f(bx-W*.5)+','+f(by-6)+' '+f(bx-W/2)+','+f(by-H*.12)+' C'+f(bx-W/2)+','+f(by-H*.45)+' '+f(bx-W*.3)+','+f(by-H*.75)+' '+f(bx-W*.16)+','+f(by-H)+' L'+f(bx+W*.16)+','+f(by-H)+' C'+f(bx+W*.3)+','+f(by-H*.75)+' '+f(bx+W/2)+','+f(by-H*.45)+' '+f(bx+W/2)+','+f(by-H*.12)+' Q'+f(bx+W*.5)+','+f(by-6)+' '+f(bx+W*.9)+','+(by+2)+' Z" fill="'+tc+'"/>';
+  if(T.climb){s+='<g stroke="#C9A77A" stroke-width="1.4"><line x1="'+f(bx-W*.5-6)+'" y1="'+by+'" x2="'+f(bx-W*.3-6)+'" y2="'+f(Math.max(0,by-H*.7))+'"/><line x1="'+f(bx-W*.5+4)+'" y1="'+by+'" x2="'+f(bx-W*.3+4)+'" y2="'+f(Math.max(0,by-H*.7))+'"/></g>';
+    for(var r2=0;r2<24;r2++){var ry=by-r2*14;if(ry<by-H*.7||ry<0)break;var ox=-W*.5+(W*.2)*(r2*14/(H*.7));s+='<line x1="'+f(bx+ox-6)+'" y1="'+f(ry)+'" x2="'+f(bx+ox+4)+'" y2="'+f(ry)+'" stroke="#C9A77A" stroke-width="1.2"/>';}
+    for(var c2=0;c2<T.climb;c2++){var cy2=by-40-c2*((H*.6)/T.climb);if(cy2<20)break;s+=figure(c2%3===1?"child":"adult",bx-W*.4+(c2%2?W*.8:0),cy2,.8,pal,{});}}
+  if(T.house)s+='<g fill="#A57A52"><rect x="'+f(bx-W*.5-26)+'" y="'+f(by-H*.36)+'" width="'+f(W+52)+'" height="5"/><rect x="'+f(bx-W*.5-20)+'" y="'+f(by-H*.36-18)+'" width="3" height="18"/><rect x="'+f(bx+W*.5+17)+'" y="'+f(by-H*.36-18)+'" width="3" height="18"/></g>';
+  var R=H*.42,cy=by-H;
+  if(!T.bare&&cy+R>-10){
+    s+='<circle cx="'+bx+'" cy="'+f(cy)+'" r="'+f(R*1.5)+'" fill="url(#'+u+'h)" opacity="'+(pal.night?.55:.3)+'" class="hum"/>';
+    CROWN.forEach(function(c){s+='<circle cx="'+f(bx+c.x*R)+'" cy="'+f(cy+c.y*R)+'" r="'+f(c.r*R)+'" fill="'+(c.l?"#A9F0D8":lc)+'"'+(c.l?' opacity=".85"':'')+'/>';});}
+  if(T.bare)for(i=0;i<6;i++){var bx2=bx+(i-2.5)*W*.5;s+='<circle cx="'+f(bx2)+'" cy="'+f(Math.max(8,cy+i*14))+'" r="3" fill="#A9F0D8" opacity=".7"/>';}
+  return s;
+}
+function canopy(u,pal,c){if(!c)return"";var s="",lc=leafC(pal),dk=mix(lc,"#0B1A20",pal.night?.55:.3);
+  s+='<rect x="0" y="0" width="800" height="'+f(c*70)+'" fill="'+dk+'"/>';
+  CANOPY.forEach(function(k){s+='<circle cx="'+f(k.x)+'" cy="'+f(c*(40+k.y*80))+'" r="'+f(k.r)+'" fill="'+(k.l?lc:dk)+'"/>';});
+  CANOPY.forEach(function(k,i){if(i%3===0)s+='<circle cx="'+f(k.x+10)+'" cy="'+f(c*(40+k.y*80)+k.r*.4)+'" r="'+f(k.r*.35)+'" fill="#A9F0D8" opacity=".6"/>';});
+  return s;}
+function seeds(p,pal,region,u){if(!p.leave)return"";var s="",rg=region||{x:380,w:410,y:40,h:280};
+  SPARKS.slice(0,Math.round(SPARKS.length*p.leave)).forEach(function(k,i){var x=rg.x+((k.x-500)/290)*rg.w,y=rg.y+((k.y-220)/140)*rg.h;
+    s+='<g class="spark" style="animation-delay:-'+k.d+'s"><circle cx="'+f(x)+'" cy="'+f(y)+'" r="10" fill="#C9FFF0" opacity=".25"/><path d="M'+f(x)+','+f(y)+' l0,-10 M'+f(x)+','+f(y)+' l-7,-7 M'+f(x)+','+f(y)+' l7,-7 M'+f(x)+','+f(y)+' l-9,-2 M'+f(x)+','+f(y)+' l9,-2" stroke="#F2FFFB" stroke-width="1.3" stroke-linecap="round"/><circle cx="'+f(x)+'" cy="'+f(y)+'" r="'+(k.r+1.2).toFixed(2)+'" fill="#FFFFFF"/></g>';});
+  return s;}
+function pot(x,y,h,pal){var lc=leafC(pal);return '<path d="M'+(x-16)+','+(y-22)+' L'+(x+16)+','+(y-22)+' L'+(x+12)+','+y+' L'+(x-12)+','+y+' Z" fill="#B8664A"/><rect x="'+(x-18)+'" y="'+(y-26)+'" width="36" height="6" fill="#A55A40"/>'+
+  '<path d="M'+x+','+(y-26)+' C'+(x-3)+','+(y-26-h*.5)+' '+(x+3)+','+(y-26-h*.8)+' '+x+','+(y-26-h)+'" stroke="#4E8A5C" stroke-width="3" fill="none"/>'+
+  '<ellipse cx="'+(x-9)+'" cy="'+(y-26-h)+'" rx="10" ry="4.5" fill="'+lc+'" transform="rotate(-25 '+(x-9)+' '+(y-26-h)+')"/><ellipse cx="'+(x+9)+'" cy="'+(y-28-h)+'" rx="10" ry="4.5" fill="'+lc+'" transform="rotate(25 '+(x+9)+' '+(y-28-h)+')"/>';}
+
+/* ================= compositions ================= */
+function wide(u,pal,p){
+  var s=sky(u,pal,p);
+  if(p.rainbow)["#E88A8A","#F2C46A","#9FD6A0","#8EB8E6","#B79BE0"].forEach(function(c,i){var r=300-i*8;s+='<path d="M'+(450-r)+',470 A'+r+','+r+' 0 0 1 '+(450+r)+',470" stroke="'+c+'" stroke-width="8" fill="none" opacity=".42"/>';});
+  if(p.bolt)s+='<polyline points="540,70 515,150 545,150 518,245" stroke="#FFFFFF" stroke-width="7" fill="none" opacity=".25" stroke-linejoin="round"/><polyline points="540,70 515,150 545,150 518,245" stroke="#FFFFFF" stroke-width="2.5" fill="none" stroke-linejoin="round"/>';
+  if(p.kite){var kx=p.kite.x,ky=p.kite.y;s+='<path d="M'+kx+','+ky+' C'+(kx-14)+','+(ky+60)+' '+(kx+16)+','+(ky+95)+' '+(kx+4)+','+(ky+140)+'" stroke="'+(pal.night?"#C9D4E8":"#5A4A50")+'" stroke-width="1" fill="none" opacity=".55"/><path d="M'+kx+','+(ky+22)+' q-8,12 0,22 q8,10 0,20" stroke="#F2B45A" stroke-width="1.6" fill="none"/><path d="M'+kx+','+(ky-20)+' L'+(kx+14)+','+ky+' L'+kx+','+(ky+22)+' L'+(kx-14)+','+ky+' Z" fill="#7FB8E6"/><path d="M'+kx+','+(ky-20)+' L'+kx+','+(ky+22)+' M'+(kx-14)+','+ky+' L'+(kx+14)+','+ky+'" stroke="#FFFFFF" stroke-width="1" opacity=".6"/>';}
+  s+='<path d="'+ridge(far)+'" fill="'+pal.far+'"/>';
+  s+='<path d="'+ridge(mid)+'" fill="'+pal.mid+'"/>';
+  TREES.forEach(function(t){s+=tree(t,mid(t.x)+4,pal);});
+  s+=bigTree(u,pal,p.tree,600,mid(600)+8,p.tree&&p.tree.g<=.12?1.7:1);
+  if(p.axe==="lean"&&p.tree)s+=axe(600+(8+p.tree.g*60)/2+6,mid(600)+8,1);
+  var lit=p.lit==null?13:p.lit;
+  HOUSES.forEach(function(h,idx){
+    var on=RANK.indexOf(idx)<lit,b=mid(h.x)+6,x0=h.x-h.w/2,wy=b-h.h+h.h*.38;
+    if(on&&pal.night&&!(p.shut&&!(idx===HOME&&p.homeBright)))s+='<circle cx="'+h.x+'" cy="'+f(wy+5)+'" r="'+(idx===HOME&&p.homeBright?80:20)+'" fill="url(#'+u+'w)"'+(idx===HOME&&p.homeBright?' opacity="1"':'')+'/>'+(idx===HOME&&p.homeBright?'<circle cx="'+h.x+'" cy="'+f(wy+5)+'" r="30" fill="url(#'+u+'w)"/>':'');
+    var hc=on||pal.night?pal.house:mix(pal.house,pal.mid,.55),rc=on||pal.night?pal.roof:mix(pal.roof,pal.mid,.55);
+    s+='<rect x="'+f(x0)+'" y="'+f(b-h.h)+'" width="'+f(h.w)+'" height="'+f(h.h+8)+'" fill="'+hc+'"/>';
+    s+='<path d="M'+f(x0-3)+','+f(b-h.h)+' L'+h.x+','+f(b-h.h-h.w*.45)+' L'+f(x0+h.w+3)+','+f(b-h.h)+' Z" fill="'+rc+'"/>';
+    if(!on&&!pal.night)s+='<path d="M'+(h.x-4)+','+f(wy)+' l8,10 M'+(h.x+4)+','+f(wy)+' l-8,10" stroke="'+mix(pal.house,"#000000",.25)+'" stroke-width="1.4"/>';
+    var wc=on?(p.shut&&!(idx===HOME&&p.homeBright)?mix(pal.win,pal.winOff,.6):pal.win):pal.winOff;
+    s+='<rect x="'+(h.x-4)+'" y="'+f(wy)+'" width="8" height="10" rx="1" fill="'+wc+'"/>';
+    if(p.shut)s+='<line x1="'+h.x+'" y1="'+f(wy)+'" x2="'+h.x+'" y2="'+f(wy+10)+'" stroke="'+pal.house+'" stroke-width="1.6"/>';});
+  if(p.bunting){var bc=["#F2B45A","#E07A5F","#8EDBD3","#E6C7F0"],BL=Math.min(12,Math.round(p.bunting*3));
+    for(var j=0;j<BL;j++){var h1=HOUSES[j],h2=HOUSES[j+1];if(!h2||h2.x-h1.x>100)continue;
+      var y1=mid(h1.x)+6-h1.h-h1.w*.45,y2=mid(h2.x)+6-h2.h-h2.w*.45,mx=(h1.x+h2.x)/2,my=Math.max(y1,y2)+20;
+      s+='<path d="M'+h1.x+','+f(y1)+' Q'+mx+','+f(my)+' '+h2.x+','+f(y2)+'" stroke="'+(pal.night?"#F6E7C8":"#5A4A50")+'" stroke-width="1" fill="none" opacity=".7"/>';
+      for(var t=1;t<5;t++){var tt=t/5,bx=(1-tt)*(1-tt)*h1.x+2*(1-tt)*tt*mx+tt*tt*h2.x,by=(1-tt)*(1-tt)*y1+2*(1-tt)*tt*my+tt*tt*y2;
+        if(pal.night)s+='<circle cx="'+f(bx)+'" cy="'+f(by+3)+'" r="8" fill="url(#'+u+'w)"/><circle cx="'+f(bx)+'" cy="'+f(by+3)+'" r="2.3" fill="#FFD98A"/>';
+        else s+='<path d="M'+f(bx-3.5)+','+f(by)+' L'+f(bx+3.5)+','+f(by)+' L'+f(bx)+','+f(by+8)+' Z" fill="'+bc[(j+t)%4]+'"/>';}}}
+  if(p.cat&&p.cat!=="mira"){var hc=HOUSES[HOME],hay=mid(hc.x)+6-hc.h-hc.w*.45,cx=hc.x+(hc.w/2+3)*.3,cy=hay+hc.w*.45*.3+1;
+    if(p.cat==="sit")s+=A(catSit(pal.fig,pal.night),cx,cy,1,pal.fig);
+    else if(p.cat==="curl")s+=A(catCurl(pal.fig),cx+2,cy+1,.45,pal.fig);
+    else s+=A(catSit(pal.fig,pal.night),cx-4,cy+1,.6,pal.fig)+A(catSit(pal.fig,pal.night),cx+5,cy+2,.55,pal.fig);}
+  if(dayish(pal)&&!p.noBirds)s+=flock([[120,130],[146,118],[168,136],[400,90],[426,100]],pal.fig);
+  if(p.ghost)s+=orb(u,{x:600,y:388,r:5,o:.5});
+  s+='<path d="'+ridge(fg)+'" fill="'+pal.fg+'"/>';
+  if(p.blocks)s+=blocks(392,fg(392)+4,1.3);
+  (p.figs||[]).forEach(function(q){s+=figure(q[0],q[1],fg(q[1])+4,q[3]||1.4,pal,q[2]);});
+  if(p.axe&&p.axe.x)s+=axe(p.axe.x,fg(p.axe.x)+4,p.axe.glow,1.4);
+  else if(p.figs&&p.figs.length&&!p.shut){var dx=p.figs[0][1]-(p.cat==="mira"&&p.figs[0][2]&&p.figs[0][2].mira?42:20);s+=A(dogB(pal.fig),dx,fg(dx)+4,1.3,pal.fig);}
+  if(p.cat==="mira")(p.figs||[]).forEach(function(q){if(q[2]&&q[2].mira&&!q[2].glow){var cx2=q[1]-16;s+=A(catSit(pal.fig,pal.night),cx2,fg(cx2)+6,1.4,pal.fig);}});
+  s+=riser(u,p.rise);
+  if(p.balloon)s+=flyingBalloon(u,p.balloon,pal);
+  s+=seeds(p,pal);
+  s+=canopy(u,pal,p.canopy||(p.tree&&p.tree.canopy));
+  s+=particles(p.noPart?null:pal.part);
+  return s;
+}
+function valley(u,pal,p){
+  var s=sky(u,pal,p),w=p.water||0,lv=452-w*118;
+  s+='<path d="M0,500 L0,330 C200,300 300,330 400,320 C520,310 640,290 800,300 L800,500 Z" fill="'+pal.far+'"/>';
+  s+='<rect x="0" y="440" width="800" height="60" fill="'+mix(pal.mid,"#000000",.15)+'"/>';
+  var VX=[318,358,396,436,474,512,548];
+  VX.forEach(function(x,i){var h=18+(i*7%11),wd=22+(i*5%9);
+    s+='<rect x="'+(x-wd/2)+'" y="'+(452-h)+'" width="'+wd+'" height="'+h+'" fill="'+pal.house+'"/><path d="M'+(x-wd/2-2)+','+(452-h)+' L'+x+','+(452-h-wd*.45)+' L'+(x+wd/2+2)+','+(452-h)+' Z" fill="'+pal.roof+'"/><rect x="'+(x-3)+'" y="'+(452-h*.65)+'" width="6" height="7" fill="'+(pal.night?pal.win:pal.win)+'" opacity="'+(w>.9?.25:.9)+'"/>';});
+  if(w<.05)s+='<path d="M290,458 C360,452 420,462 480,455 S560,452 600,456" stroke="'+pal.water+'" stroke-width="5" fill="none" stroke-linecap="round"/>';
+  if(p.skip)[[340,448],[372,440],[400,446],[428,438],[454,444],[480,432],[510,410],[540,370],[570,320],[600,260]].forEach(function(d,i){s+='<ellipse cx="'+d[0]+'" cy="'+d[1]+'" rx="'+(3.5-i*.2)+'" ry="1.4" fill="#FFFFFF" opacity="'+(1-i*.06)+'"/>';});
+  if(w>0){s+='<rect x="0" y="'+f(lv)+'" width="800" height="'+f(500-lv)+'" fill="url(#'+u+'q)" opacity=".86"/>';
+    s+='<line x1="0" y1="'+f(lv)+'" x2="800" y2="'+f(lv)+'" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="1.5"/>';}
+
+  if(p.swimmer&&w>0)s+='<ellipse cx="430" cy="'+f(lv+2)+'" rx="16" ry="3" fill="none" stroke="#FFFFFF" stroke-opacity=".7"/><circle cx="430" cy="'+f(lv-1)+'" r="4.5" fill="'+pal.fig+'"/><rect x="426" y="'+f(lv+2)+'" width="8" height="2" fill="#F2B45A"/>';
+  s+='<path d="M800,500 L800,270 C660,285 580,380 560,452 L560,500 Z" fill="'+pal.mid+'"/>';
+  s+=bigTree(u,pal,p.tree,700,300,p.treeSc||.55);
+  if(p.roots){var rc=mix(pal.mid,"#1A120E",.55),RT=[[700,302,660,330,640,370,590,400,560,452],[700,302,680,360,620,420,600,470,560,500],[696,304,640,320,600,350,560,380,540,430],[704,302,740,340,730,400,700,450,690,500],[690,300,620,300,580,330,520,360,470,452]];
+    RT.slice(0,Math.ceil(p.roots*5)).forEach(function(r,i){var d='M'+r[0]+','+r[1]+' C'+r[2]+','+r[3]+' '+r[4]+','+r[5]+' '+r[6]+','+r[7]+' S'+(r[8]+10)+','+(r[9]-20)+' '+r[8]+','+r[9];
+      s+='<path d="'+d+'" stroke="'+rc+'" stroke-width="'+(6-i*.6)+'" fill="none" stroke-linecap="round"/>';
+      s+='<path d="M'+r[4]+','+r[5]+' q-14,6 -22,18 M'+r[6]+','+r[7]+' q12,4 18,16" stroke="'+rc+'" stroke-width="2" fill="none" stroke-linecap="round"/>';});}
+  s+='<path d="M0,500 L0,285 C140,295 230,390 300,452 L300,500 Z" fill="'+pal.mid+'"/>';
+  s+='<path d="M800,500 L800,270 C660,285 580,380 560,452 L560,500 Z" fill="'+pal.mid+'"/>';
+  s+='<path d="M0,500 L0,380 C80,380 150,420 210,500 Z" fill="'+pal.fg+'"/>';
+  [{x:40,s:.9},{x:620,s:1},{x:700,s:1.1},{x:760,s:.9}].forEach(function(t){var y=t.x<300?300+t.x*.1:290+(800-t.x)*.25;s+=tree(t,t.x<300?318:y+10,pal);});
+  (p.figs||[]).forEach(function(q){s+=figure(q[0],q[1],q[4]||420,q[3]||1.3,pal,q[2]);});
+  if(!pal.night&&pal.part!=="snow"){var fc=pal.part==="rain"?"#3E6A4A":"#4E8A5C";
+    if(w<.05)s+=A(frogB(0),336,461,.75,fc)+A(frogB(0),540,464,.7,fc);
+    else if(w>=.9)s+=A(frogB(1),530,f(lv+1),.65,fc);
+    if(dayish(pal))s+=flock([[380,110],[402,98],[426,114]],pal.fig,1);}
+  if(p.cart)s+='<g fill="'+pal.fig+'"><rect x="150" y="'+(p.cart-16)+'" width="30" height="12" rx="2"/><circle cx="156" cy="'+(p.cart-2)+'" r="4"/><circle cx="174" cy="'+(p.cart-2)+'" r="4"/></g>';
+  s+=particles(pal.part);
+  return s;
+}
+function lake(u,pal,p){
+  var s='<rect width="800" height="210" fill="url(#'+u+'k)"/>';
+  if(pal.sun)s+='<circle cx="'+pal.sun.x+'" cy="'+pal.sun.y+'" r="'+pal.sun.r*3+'" fill="url(#'+u+'s)"/><circle cx="'+pal.sun.x+'" cy="'+pal.sun.y+'" r="'+pal.sun.r+'" fill="'+pal.sun.c+'"/>';
+  s+='<path d="M0,210 L0,170 C120,150 220,175 330,160 C470,142 600,170 800,150 L800,210 Z" fill="'+pal.far+'"/>';
+  s+='<rect y="210" width="800" height="290" fill="url(#'+u+'q)"/>';
+  s+='<path d="M0,210 L0,238 C120,254 220,232 330,246 C470,262 600,236 800,254 L800,210 Z" fill="'+pal.far+'" opacity=".35"/>';
+  for(var k=0;k<5;k++)s+='<polygon points="'+(120+k*140)+',210 '+(150+k*140)+',210 '+(80+k*140)+',500 '+(30+k*140)+',500" fill="#FFFFFF" opacity=".05"/>';
+  [[140,420,50,30],[240,440,60,36],[360,410,46,28],[470,450,64,40],[590,425,52,30],[690,445,44,26]].forEach(function(h){
+    s+='<g opacity=".32"><rect x="'+h[0]+'" y="'+(h[1]-h[3])+'" width="'+h[2]+'" height="'+(h[3]+60)+'" fill="#0E1A2A"/><path d="M'+(h[0]-4)+','+(h[1]-h[3])+' L'+(h[0]+h[2]/2)+','+(h[1]-h[3]-h[2]*.45)+' L'+(h[0]+h[2]+4)+','+(h[1]-h[3])+' Z" fill="#0E1A2A"/><rect x="'+(h[0]+h[2]/2-5)+'" y="'+(h[1]-h[3]*.6)+'" width="10" height="12" fill="#6F8FA6"/></g>';});
+  if(p.steps)for(k=0;k<9;k++)s+='<rect x="'+(90+k*75)+'" y="'+(478-(k%3)*4)+'" width="30" height="5" fill="#0E1A2A" opacity=".35"/>';
+  for(k=0;k<14;k++){var bx=60+(k*97)%700,by=260+(k*53)%220;s+='<circle cx="'+bx+'" cy="'+by+'" r="'+(1.5+(k%3))+'" fill="none" stroke="#FFFFFF" stroke-opacity=".3"/>';}
+  s+='<line x1="0" y1="210" x2="800" y2="210" stroke="#FFFFFF" stroke-opacity=".6" stroke-width="1.5"/>';
+  [[250,330],[520,385],[650,300]].forEach(function(q,i){s+=A(fishB(),q[0],q[1],1.2,"#0E1A2A","drift",(11+i*2).toFixed(1),(i*3).toFixed(1)).replace('<g transform','<g opacity=".45" transform');});
+  if(p.flowers)[[372,211,"#F2B45A"],[389,214,"#E07A5F"],[404,210,"#E6C7F0"],[420,213,"#F7C6D4"],[396,219,"#F2B45A"],[436,211,"#E07A5F"],[452,215,"#F7C6D4"]].forEach(function(q){s+='<circle cx="'+q[0]+'" cy="'+q[1]+'" r="5.5" fill="'+q[2]+'"/><circle cx="'+q[0]+'" cy="'+q[1]+'" r="1.8" fill="#FFF3C4"/>';});
+  s+=A(frogB(1),600,212,1.1,"#4E8A5C");
+  return s;
+}
+function room(u,pal,p){
+  var W=PAL[p.win||p.season],s="";
+  s+='<rect width="800" height="500" fill="'+pal.wall+'"/>';
+  s+='<rect y="400" width="800" height="100" fill="'+pal.floor+'"/><rect y="398" width="800" height="4" fill="'+mix(pal.floor,"#000000",.2)+'"/>';
+  // window
+  s+='<linearGradient id="'+u+'m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+W.skyT+'"/><stop offset="1" stop-color="'+W.skyB+'"/></linearGradient>';
+  s+='<rect x="500" y="70" width="220" height="220" fill="url(#'+u+'m)"/>';
+  if(W.stars)for(var k=0;k<14;k++)s+='<circle cx="'+(510+(k*67)%200)+'" cy="'+(80+(k*41)%120)+'" r="1" fill="#FFF" opacity=".8"/>';
+  if(p.winLights)for(k=0;k<Math.round(40*p.winLights);k++)s+='<circle cx="'+(506+(k*73)%208)+'" cy="'+(78+(k*37)%170)+'" r="'+(1+(k%3)*.6)+'" fill="#E4FFFA"/>';
+  s+='<path d="M500,'+(200+(p.hill||0))+' C560,190 640,215 720,196 L720,290 L500,290 Z" fill="'+W.mid+'"/>';
+  if(W.part==="snow"||W.part==="blossom"||W.part==="leaf")for(k=0;k<12;k++)s+='<circle cx="'+(510+(k*59)%200)+'" cy="'+(90+(k*43)%190)+'" r="1.8" fill="'+({snow:"#FFF",blossom:"#F7C6D4",leaf:"#E0793A"}[W.part])+'"/>';
+  if(p.glowWin)s+='<rect x="500" y="70" width="220" height="220" fill="url(#'+u+'h)" opacity=".7"/>';
+  s+='<rect x="500" y="70" width="220" height="220" fill="none" stroke="'+mix(pal.wall,"#000000",.45)+'" stroke-width="10"/><line x1="610" y1="70" x2="610" y2="290" stroke="'+mix(pal.wall,"#000000",.45)+'" stroke-width="6"/><line x1="500" y1="180" x2="720" y2="180" stroke="'+mix(pal.wall,"#000000",.45)+'" stroke-width="6"/>';
+  if(p.glowWin)s+='<ellipse cx="610" cy="420" rx="260" ry="50" fill="url(#'+u+'h)" opacity=".35"/>';
+  var dark=mix(pal.wall,"#000000",.55),wood=mix(pal.floor,"#000000",.35),r=p.room;
+  if(r==="classroom"){
+    s+='<rect x="70" y="90" width="340" height="150" rx="4" fill="#2F4A3E"/><rect x="70" y="236" width="340" height="6" fill="'+wood+'"/>';
+    (p.board||["M100,130 l60,0 M100,150 l90,0 M100,170 l40,0","M240,140 c20,-20 40,20 60,0 M250,180 l80,0"]).forEach(function(d){s+='<path d="'+d+'" stroke="#E8F0EA" stroke-width="2" fill="none" opacity=".75" stroke-linecap="round"/>';});
+    if(p.boardText)s+='<filter id="'+u+'c" x="-5%" y="-20%" width="110%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -1.6 1.15" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in" result="c"/><feDisplacementMap in="c" in2="n" scale="3"/><feGaussianBlur stdDeviation=".35"/></filter>'+
+      '<filter id="'+u+'b" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="9"/></filter><g opacity=".09" fill="#E8F0EA" filter="url(#'+u+'b)"><ellipse cx="200" cy="150" rx="120" ry="22" transform="rotate(-6 200 150)"/><ellipse cx="300" cy="200" rx="90" ry="16" transform="rotate(4 300 200)"/><ellipse cx="150" cy="210" rx="60" ry="12"/></g>'+
+      '<path d="M100,122 l70,0 M260,118 c20,-14 40,14 60,0 M300,222 l70,0" stroke="#E8F0EA" stroke-width="2" opacity=".08" stroke-linecap="round"/>'+
+      '<text x="240" y="182" text-anchor="middle" font-family="Alegreya,Georgia,serif" font-style="italic" font-size="46" fill="#E8F0EA" opacity=".5" filter="url(#'+u+'c)" transform="rotate(-3 240 170)">'+p.boardText+'</text>'+
+      '<path d="M84,236 q60,-3 120,1 t130,-1" stroke="#E8F0EA" stroke-width="3" opacity=".12" fill="none"/>';
+    var nd=p.desks==null?6:p.desks;
+    for(k=0;k<6;k++){var dx=80+(k%3)*130,dy=k<3?410:465;
+      s+='<rect x="'+dx+'" y="'+(dy-30)+'" width="80" height="8" fill="'+wood+'"/><rect x="'+(dx+6)+'" y="'+(dy-22)+'" width="5" height="26" fill="'+wood+'"/><rect x="'+(dx+69)+'" y="'+(dy-22)+'" width="5" height="26" fill="'+wood+'"/>';
+      if(k<nd)s+='<circle cx="'+(dx+40)+'" cy="'+(dy-48)+'" r="10" fill="'+pal.fig+'"/><path d="M'+(dx+26)+','+(dy-30)+' Q'+(dx+40)+','+(dy-44)+' '+(dx+54)+','+(dy-30)+' Z" fill="'+pal.fig+'"/>';}
+  }else if(r==="bakery"){
+    s+='<rect x="60" y="120" width="360" height="8" fill="'+wood+'"/><rect x="60" y="210" width="360" height="8" fill="'+wood+'"/>';
+    var nl=p.loaves==null?12:p.loaves;for(k=0;k<nl;k++){var lx=80+(k%6)*56,ly=k<6?112:202;s+='<ellipse cx="'+lx+'" cy="'+ly+'" rx="22" ry="11" fill="'+(p.pale?"#C9C4B8":"#C28A4E")+'"/><path d="M'+(lx-10)+','+(ly-4)+' l6,-4 M'+(lx)+','+(ly-5)+' l6,-4 M'+(lx+10)+','+(ly-4)+' l5,-3" stroke="'+(p.pale?"#A9A498":"#8E5A2E")+'" stroke-width="2"/>';}
+  }else if(r==="clocks"){
+    var CL=[[100,120,34],[190,100,22],[260,150,40],[360,110,28],[140,220,26],[220,250,20],[330,230,36],[420,190,24]];
+    CL.forEach(function(c,i){var st=p.stopped&&i!==2,a1=st?-1.2:i*1.7,a2=st?-1.2:i*2.9+1;
+      if(p.stopped&&i===2)s+='<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+(c[2]*2.2)+'" fill="url(#'+u+'w)"/>';
+      s+='<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+c[2]+'" fill="'+mix(pal.wall,"#FFFFFF",.4)+'" stroke="'+wood+'" stroke-width="4"/>';
+      s+='<line x1="'+c[0]+'" y1="'+c[1]+'" x2="'+f(c[0]+Math.cos(a1)*c[2]*.55)+'" y2="'+f(c[1]+Math.sin(a1)*c[2]*.55)+'" stroke="'+dark+'" stroke-width="2.5" stroke-linecap="round"/><line x1="'+c[0]+'" y1="'+c[1]+'" x2="'+f(c[0]+Math.cos(a2)*c[2]*.8)+'" y2="'+f(c[1]+Math.sin(a2)*c[2]*.8)+'" stroke="'+dark+'" stroke-width="1.5" stroke-linecap="round"/>';
+      if(p.dust&&i!==2)s+='<path d="M'+(c[0]-c[2])+','+(c[1]-c[2]*.2)+' a'+c[2]+','+c[2]+' 0 0 1 '+(c[2]*2)+',0" stroke="#CFC8BE" stroke-width="3" fill="none" opacity=".5"/>';});
+  }else if(r==="home"){
+    s+='<rect x="120" y="170" width="140" height="100" fill="'+mix(pal.wall,"#000000",.12)+'"/><rect x="130" y="180" width="120" height="80" fill="'+mix(pal.wall,"#000000",.2)+'"/>';
+  }else if(r==="workshop"){
+    s+='<g stroke="'+wood+'" stroke-width="3" fill="none"><path d="M80,110 l90,0 M80,160 l90,0 M230,120 l120,0"/></g>';
+    [[90,100],[110,100],[140,100],[250,110],[290,110],[320,110],[100,150],[150,150]].forEach(function(t,i){s+='<rect x="'+t[0]+'" y="'+(t[1]-10-(i%3)*4)+'" width="'+(10+i%2*6)+'" height="'+(10+(i%3)*4)+'" fill="'+mix(pal.wall,"#000000",.3+(i%3)*.08)+'"/>';});
+  }
+  // people (behind furniture)
+  (p.figs||[]).forEach(function(q){s+=figure(q[0],q[1],q[4]||470,q[3]||3,pal,q[2]);});
+  // foreground furniture
+  if(r==="bakery"){s+='<rect x="40" y="360" width="560" height="140" fill="'+wood+'"/><rect x="40" y="352" width="560" height="12" fill="'+mix(wood,"#FFFFFF",.15)+'"/>';
+    if(p.counterLoaves)for(k=0;k<p.counterLoaves;k++)s+='<ellipse cx="'+(120+k*60)+'" cy="346" rx="22" ry="10" fill="#C28A4E"/>';}
+  if((r==="clocks"||r==="home"||r==="workshop")&&!p.noTable){s+='<rect x="180" y="330" width="360" height="12" fill="'+wood+'"/><rect x="200" y="342" width="10" height="100" fill="'+wood+'"/><rect x="510" y="342" width="10" height="100" fill="'+wood+'"/>';}
+  if(p.balloonShop){
+    s+='<g transform="translate(205,432) rotate(-90) scale(.5,1)">'+balloonG(u,0,0,180,280,{flat:1})+'</g>';
+    s+='<g stroke="'+wood+'" stroke-width="1.5" fill="none" opacity=".8"><path d="M488,418 L548,440 M488,446 L548,448"/></g>';
+    s+=basket(566,472,2.8);
+    s+='<path d="M700,474 C704,446 722,428 744,432 C764,436 772,420 786,440 C796,454 794,468 792,474 Z" fill="'+mix(pal.wall,"#9FC3E0",.3)+'" opacity=".9"/><path d="M714,470 q12,-18 26,-8 M748,470 q10,-22 30,-14 M726,452 q16,-12 30,-4" stroke="'+mix(pal.wall,"#000000",.35)+'" stroke-width="1.5" fill="none"/><rect x="752" y="446" width="12" height="9" fill="#E07A5F" opacity=".8" transform="rotate(10 758 450)"/>';}
+  if(r==="home"&&p.lamp)s+='<circle cx="250" cy="300" r="70" fill="url(#'+u+'w)"/><path d="M236,300 L264,300 L258,282 L242,282 Z" fill="#F2B45A"/><rect x="248" y="300" width="4" height="30" fill="'+dark+'"/>';
+  if(p.letters)for(k=0;k<p.letters;k++){var lx2=300+k*38,gl=p.letterGlow;s+=(gl?'<rect x="'+(lx2-8)+'" y="'+(312-(k%2)*3-8)+'" width="46" height="30" fill="url(#'+u+'h)"/>':'')+'<rect x="'+lx2+'" y="'+(318-(k%2)*3)+'" width="30" height="12" fill="'+(gl?"#E9FFFB":"#F6F1E6")+'" transform="rotate('+((k%3)-1)*6+' '+(lx2+15)+' 324)"/>';}
+  if(p.leaves)for(k=0;k<p.leaves;k++){var qx=300+k*38;s+='<path d="M'+qx+',326 C'+(qx+6)+','+312+' '+(qx+24)+',310 '+(qx+30)+',316 C'+(qx+24)+',328 '+(qx+10)+',332 '+qx+',326 Z" fill="'+(p.leafGlow?"#B8F5E1":"#6FD3B0")+'"/>';}
+  if(p.card)s+='<rect x="340" y="296" width="30" height="34" fill="#F4FFFD"/><rect x="370" y="296" width="30" height="34" fill="#E4F7F4"/><circle cx="385" cy="313" r="5" fill="#8EDBD3"/>';
+  if(p.orb)s+=orb(u,p.orb);
+  if(p.seed)s+='<circle cx="'+p.seed[0]+'" cy="'+p.seed[1]+'" r="30" fill="url(#'+u+'h)" class="hum" transform="translate('+p.seed[0]+','+p.seed[1]+') scale(2) translate('+(-p.seed[0])+','+(-p.seed[1])+')"/><ellipse cx="'+p.seed[0]+'" cy="'+p.seed[1]+'" rx="14" ry="10" fill="#8A5A3A"/><path d="M'+p.seed[0]+','+(p.seed[1]-8)+' q4,-16 14,-18" stroke="#6FD3B0" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="'+(p.seed[0]+16)+'" cy="'+(p.seed[1]-26)+'" rx="8" ry="4" fill="#6FD3B0" transform="rotate(-20 '+(p.seed[0]+16)+' '+(p.seed[1]-26)+')"/>';
+  if(p.pot)s+=pot(p.pot[0],p.pot[1],p.pot[2],pal);
+  if(p.leaf)s+='<circle cx="385" cy="315" r="40" fill="url(#'+u+'h)"/><path d="M360,322 C370,295 400,292 412,302 C402,322 380,330 360,322 Z" fill="#6FD3B0"/><path d="M362,321 L408,303" stroke="#B8F5E1" stroke-width="1.5"/>';
+  var ac=pal.fig;
+  if(r==="home"&&p.cushion)s+='<ellipse cx="460" cy="466" rx="34" ry="9" fill="'+mix(pal.floor,"#6A4E5E",.5)+'"/><ellipse cx="460" cy="462" rx="24" ry="5" fill="'+mix(pal.floor,"#000000",.25)+'"/><path d="M520,470 l18,0 l-3,-7 l-12,0 Z" fill="'+mix(pal.floor,"#000000",.35)+'"/>';
+  else if(r==="home"&&!p.noCat)s+=A(catCurl(ac),460,470,2.2,ac);
+  if(r==="bakery")s+=A(catSit(ac,W.night),575,352,2.2,ac);
+  if(r==="clocks"&&!p.stopped)s+=A(catCurl(ac),470,330,1.6,ac);
+  if(r==="classroom"&&!W.night)s+=A(perchB(),690,288,2.4,mix(W.mid,"#000000",.5));
+  if(p.book)s+='<path d="M'+p.book[0]+','+p.book[1]+' l22,-6 l22,6 l0,4 l-22,-6 l-22,6 Z" fill="#F6F1E6"/>';
+  return s;
+}
+function vast(u,pal,p){
+  var s=sky(u,pal,p),tc=pal.night?"#221B28":"#4E3A2E",lc=leafC(pal);
+  s+='<path d="'+ridge(function(x){return 440+8*Math.sin(x/100);})+'" fill="'+pal.far+'"/>';
+  s+='<path d="M230,500 C260,420 300,300 318,0 L482,0 C500,300 540,420 570,500 Z" fill="'+tc+'"/>';
+  for(var k=0;k<9;k++){var x=300+k*22;s+='<path d="M'+x+',500 C'+(x+8)+',380 '+(x-6)+',200 '+(x+4+k)+',0" stroke="'+mix(tc,"#000000",.3)+'" stroke-width="2" fill="none" opacity=".55"/>';}
+  s+='<path d="M330,90 Q200,40 90,-10 M470,60 Q620,20 760,-20 M350,190 Q250,150 170,110 M455,160 Q560,120 650,70" stroke="'+tc+'" stroke-width="18" fill="none" stroke-linecap="round"/>';
+  s+=canopy(u,pal,.55);
+  s+='<ellipse cx="400" cy="30" rx="380" ry="120" fill="url(#'+u+'h)" opacity=".35" class="hum"/>';
+  if(p.ladder){s+='<g stroke="#C9A77A" stroke-width="2"><path d="M318,500 C330,380 338,250 346,120" fill="none"/><path d="M338,500 C350,380 358,250 366,120" fill="none"/></g>';for(var r=0;r<20;r++){var yy=490-r*19;s+='<line x1="'+(320+r*1.5)+'" y1="'+yy+'" x2="'+(340+r*1.5)+'" y2="'+yy+'" stroke="#C9A77A" stroke-width="2"/>';}}
+  s+=seeds(p,pal,{x:120,w:560,y:20,h:240});
+  s+='<path d="M0,500 L0,470 C200,455 600,455 800,470 L800,500 Z" fill="'+pal.fg+'"/>';
+  (p.figs||[]).forEach(function(q){s+=figure(q[0],q[1],q[4]||466,q[3]||.9,pal,q[2]);});
+  s+=particles(pal.part);
+  if(p.white)s+='<rect width="800" height="500" fill="#FFFFFF" opacity="'+p.white+'"/>';
+  return s;
+}
+function profile(u,pal,p){
+  var s=sky(u,pal,p);
+  s+=bigTree(u,pal,p.tree,620,440,p.treeSc||.6);
+  s+='<path d="'+ridge(function(x){return 430+10*Math.sin(x/90);})+'" fill="'+pal.far+'" opacity=".9"/>';
+  s+=seeds(p,pal,{x:380,w:400,y:30,h:260});
+  var age=p.age||"child",sc=age==="child"?.86:1,c=pal.fig;
+  var head='<path d="M130,500 C135,450 110,420 100,380 C80,300 110,205 205,195 C275,188 310,235 312,275 L330,305 C333,311 327,314 318,315 C322,325 318,330 312,332 C316,338 314,344 306,346 C305,368 295,380 270,382 C258,383 252,392 252,410 L250,500 Z" fill="'+c+'"/>';
+  if(age==="child")head+='<path d="M100,330 C88,250 130,190 205,190 C260,190 300,215 300,250 C270,236 230,240 205,262 C170,248 130,280 120,340 Z" fill="'+c+'"/>';
+  if(age==="adult")head+='<path d="M96,390 C60,300 100,190 205,188 C265,188 300,220 305,250 C260,232 200,236 170,280 C150,330 150,400 140,470 Z" fill="'+c+'"/>';
+  if(age==="old")head+='<circle cx="92" cy="258" r="30" fill="'+c+'"/><path d="M100,300 C92,230 140,192 205,192 C260,192 296,222 300,248 C250,232 190,240 150,300 Z" fill="'+c+'"/>';
+  head+='<path d="M135,430 C170,445 230,445 256,428 L258,452 C230,470 170,468 134,455 Z" fill="#F2B45A"/>';
+  s+='<g transform="translate(0,'+(500-500*sc)+') scale('+sc+')">'+head+'</g>';
+  s+=particles(pal.part);
+  return s;
+}
+function above(u,pal,p){
+  var s='<rect width="800" height="500" fill="#10261F"/>',r=rng(5);
+  for(var i=0;i<150;i++){var x=r()*860-30,y=r()*540-20,rr=26+r()*40;s+='<circle cx="'+f(x)+'" cy="'+f(y)+'" r="'+f(rr)+'" fill="'+(i%4?"#2F6A58":"#3E8A70")+'"/>';}
+  for(i=0;i<60;i++){var x2=r()*800,y2=r()*500;s+='<circle cx="'+f(x2)+'" cy="'+f(y2)+'" r="'+f(6+r()*10)+'" fill="#6FD3B0" opacity=".45"/>';}
+  s+='<ellipse cx="470" cy="300" rx="46" ry="30" fill="#1B2A22"/><ellipse cx="470" cy="300" rx="46" ry="30" fill="none" stroke="#0E1A14" stroke-width="6" opacity=".6"/>';
+  [[458,296],[466,290],[474,300],[462,306],[480,294],[470,310]].slice(0,p.embers||6).forEach(function(e){s+='<circle cx="'+e[0]+'" cy="'+e[1]+'" r="6" fill="url(#'+u+'w)"/><circle cx="'+e[0]+'" cy="'+e[1]+'" r="1.4" fill="#FFD27A"/>';});
+  s+='<rect width="800" height="500" fill="url(#'+u+'h)" opacity=".08"/>';
+  return s;
+}
+function riser(u,r){if(!r)return"";
+  return '<path d="M'+(r.x+14)+',470 Q'+(r.x+10)+','+(r.y+80)+' '+r.x+','+(r.y+6)+'" stroke="#F2B45A" stroke-width="1.5" fill="none" opacity=".45"/><circle cx="'+r.x+'" cy="'+r.y+'" r="18" fill="url(#'+u+'w)"/><circle cx="'+r.x+'" cy="'+r.y+'" r="4" fill="#FFD98A"/>'+
+    (r.wait?'<circle cx="'+(r.x-26)+'" cy="'+(r.y-18)+'" r="2.4" fill="#E4FFFA"/><circle cx="'+(r.x+30)+'" cy="'+(r.y-26)+'" r="2" fill="#E4FFFA"/><circle cx="'+(r.x+6)+'" cy="'+(r.y-40)+'" r="2.6" fill="#E4FFFA"/><circle cx="'+r.x+'" cy="'+r.y+'" r="60" fill="url(#'+u+'h)" opacity=".35"/>':'');}
+function skyOnly(u,pal,p){
+  var s=sky(u,pal,p);s+=seeds(p,pal,{x:40,w:720,y:40,h:360});s+=riser(u,p.rise);
+  s+='<path d="'+ridge(function(x){return 476+6*Math.sin(x/70);})+'" fill="'+pal.fg+'"/>';
+  if(dayish(pal))s+=flock([[180,160],[204,148],[228,166],[520,120],[548,132],[600,200]],pal.fig,1.2);
+  s+=particles(pal.part);return s;
+}
+function branchComp(u,pal,p){
+  var s=sky(u,pal,p),tc=pal.night?"#221B28":"#5E4738",lc=leafC(pal);
+  s+='<path d="'+ridge(function(x){return 452+8*Math.sin(x/90);})+'" fill="'+pal.far+'"/>';
+  for(var k=0;k<14;k++){var hx=40+k*55,hy=452+8*Math.sin(hx/90);s+='<rect x="'+(hx-7)+'" y="'+f(hy-12)+'" width="14" height="14" fill="'+pal.house+'" opacity=".8"/><path d="M'+(hx-9)+','+f(hy-12)+' L'+hx+','+f(hy-20)+' L'+(hx+9)+','+f(hy-12)+' Z" fill="'+pal.roof+'" opacity=".8"/>';}
+  s+='<path d="M-20,92 C200,70 500,130 820,60 L820,104 C500,176 200,122 -20,150 Z" fill="'+tc+'"/>';
+  var ITEMS={apple:function(x,y){return'<circle cx="'+x+'" cy="'+(y+14)+'" r="14" fill="#D9534F"/><ellipse cx="'+(x+6)+'" cy="'+(y-1)+'" rx="6" ry="3" fill="'+lc+'"/>';},
+    loaf:function(x,y){return'<ellipse cx="'+x+'" cy="'+(y+14)+'" rx="28" ry="14" fill="#C28A4E"/><path d="M'+(x-12)+','+(y+9)+' l6,-5 M'+x+','+(y+8)+' l6,-5 M'+(x+12)+','+(y+9)+' l5,-4" stroke="#8E5A2E" stroke-width="2"/>';},
+    clock:function(x,y){return'<circle cx="'+x+'" cy="'+(y+22)+'" r="22" fill="#F4EEDC" stroke="#8A6A4A" stroke-width="4"/><line x1="'+x+'" y1="'+(y+22)+'" x2="'+x+'" y2="'+(y+9)+'" stroke="#3A2E2A" stroke-width="2.5" stroke-linecap="round"/><line x1="'+x+'" y1="'+(y+22)+'" x2="'+(x+11)+'" y2="'+(y+27)+'" stroke="#3A2E2A" stroke-width="2" stroke-linecap="round"/>';},
+    book:function(x,y){return'<rect x="'+(x-16)+'" y="'+y+'" width="32" height="40" rx="2" fill="#4A6FA5"/><rect x="'+(x+10)+'" y="'+(y+2)+'" width="4" height="36" fill="#F4EEDC"/><line x1="'+(x-10)+'" y1="'+(y+12)+'" x2="'+(x+4)+'" y2="'+(y+12)+'" stroke="#DCE6F4" stroke-width="2"/>';},
+    shoe:function(x,y){return'<path d="M'+(x-10)+','+y+' L'+(x+2)+','+y+' L'+(x+2)+','+(y+22)+' C'+(x+14)+','+(y+22)+' '+(x+24)+','+(y+26)+' '+(x+24)+','+(y+34)+' L'+(x-10)+','+(y+34)+' Z" fill="#7A4A3A"/><rect x="'+(x-10)+'" y="'+(y+30)+'" width="34" height="4" fill="#3A241C"/>';},
+    lantern:function(x,y){return'<circle cx="'+x+'" cy="'+(y+20)+'" r="26" fill="url(#'+u+'w)"/><rect x="'+(x-11)+'" y="'+(y+4)+'" width="22" height="30" rx="4" fill="#F2B45A"/><rect x="'+(x-13)+'" y="'+y+'" width="26" height="5" fill="#5A4030"/>';},
+    house:function(x,y){return'<rect x="'+(x-18)+'" y="'+(y+14)+'" width="36" height="28" fill="#8C6F7E"/><path d="M'+(x-22)+','+(y+14)+' L'+x+','+(y-2)+' L'+(x+22)+','+(y+14)+' Z" fill="#6A4E5E"/><rect x="'+(x-4)+'" y="'+(y+24)+'" width="8" height="10" fill="#FFE9B8"/>';}};
+  (p.items||["apple","loaf","clock","book","shoe","house","lantern"]).forEach(function(it,i,arr){var x=70+i*(680/Math.max(1,arr.length-1)),by=100+(x/800)*20+Math.sin(x/120)*8,len=40+(i*37)%50;
+    s+='<line x1="'+f(x)+'" y1="'+f(by)+'" x2="'+f(x)+'" y2="'+f(by+len)+'" stroke="#4E8A5C" stroke-width="2"/>'+ITEMS[it](f(x)*1,by+len);});
+  for(k=0;k<30;k++){var lx=-10+k*29,ly=78+Math.sin(k*1.7)*14+(lx/800)*-20;s+='<ellipse cx="'+lx+'" cy="'+f(ly)+'" rx="16" ry="7" fill="'+(k%4?lc:"#A9F0D8")+'" transform="rotate('+((k%3)-1)*25+' '+lx+' '+f(ly)+')"/>';}
+  [.3,.66].forEach(function(t){var m=1-t,bx=m*m*m*-20+3*m*m*t*200+3*m*t*t*500+t*t*t*820,by=m*m*m*92+3*m*m*t*70+3*m*t*t*130+t*t*t*60;s+=A(perchB(),bx,by-6,2,pal.fig);});
+  (p.figs||[]).forEach(function(q){s+=figure(q[0],q[1],462,q[3]||1.4,pal,q[2]);});
+  s+=particles(pal.part);
+  return s;
+}
+var WORLDS=[{x:400,y:215,r:40,c:"#EEEAD8"},{x:140,y:120,r:24,c:"#C96A4A"},{x:640,y:95,r:30,c:"#D9B26A",ring:1},{x:300,y:55,r:14,c:"#9FC3E0"},{x:720,y:230,r:18,c:"#7FB8A0"},{x:70,y:300,r:12,c:"#B79BE0"},{x:520,y:30,r:10,c:"#E6C7F0"}];
+var FARW=[];(function(){var r=rng(77);for(var i=0;i<46;i++){var a=r()*Math.PI*2,d=.18+Math.sqrt(r())*.9;FARW.push({x:400+Math.cos(a)*d*430,y:250+Math.sin(a)*d*260,r:1.5+r()*4.5,c:["#C96A4A","#D9B26A","#9FC3E0","#7FB8A0","#B79BE0","#EEEAD8"][i%6]});}})();
+function qpt(x0,y0,cx,cy,x1,y1,t){var m=1-t;return[m*m*x0+2*m*t*cx+t*t*x1,m*m*y0+2*m*t*cy+t*t*y1];}
+function limb(x0,y0,cx,cy,x1,y1,w,leaves,flow){var d='M'+f(x0)+','+f(y0)+' Q'+f(cx)+','+f(cy)+' '+f(x1)+','+f(y1),s="";
+  s+='<path d="'+d+'" stroke="#8EDBD3" stroke-width="'+f(w*2.6)+'" fill="none" stroke-linecap="round" opacity=".1"/>';
+  s+='<path d="'+d+'" stroke="#3E6A5A" stroke-width="'+f(w)+'" fill="none" stroke-linecap="round"/>';
+  if(flow)s+='<path class="flow" d="'+d+'" stroke="#DFFFF6" stroke-width="'+f(Math.max(1,w*.3))+'" fill="none" stroke-linecap="round" stroke-dasharray="4 48" opacity=".9"/>';
+  for(var k=1;k<=leaves;k++){var t=k/(leaves+1),P=qpt(x0,y0,cx,cy,x1,y1,t),sz=Math.max(2.5,w*(1.4-t*.6));
+    s+='<ellipse cx="'+f(P[0]+(k%2?sz:-sz))+'" cy="'+f(P[1])+'" rx="'+f(sz*1.3)+'" ry="'+f(sz*.55)+'" fill="'+(k%3?"#6FD3B0":"#A9F0D8")+'" transform="rotate('+(k%2?-30:30)+' '+f(P[0])+' '+f(P[1])+')"/>';}
+  return s;}
+function planet(u,x,y,r,c,ring,green){var s="";
+  if(green)s+='<circle cx="'+x+'" cy="'+y+'" r="'+f(r*2.2)+'" fill="url(#'+u+'h)" opacity=".4"/>';
+  if(ring)s+='<path d="M'+f(x-r*1.8)+','+y+' A'+f(r*1.8)+','+f(r*.45)+' 0 0 0 '+f(x+r*1.8)+','+y+'" stroke="'+c+'" stroke-width="'+f(Math.max(1.5,r*.12))+'" fill="none" opacity=".75"/>';
+  s+='<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+c+'"/>';
+  if(green)for(var k=0;k<8;k++){var a=k*.8+x;s+='<circle cx="'+f(x+Math.cos(a)*r*.55)+'" cy="'+f(y+Math.sin(a)*r*.5)+'" r="'+f(r*.3)+'" fill="#5FCFAE"/>';}
+  s+='<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="url(#'+u+'sh)"/>';
+  if(ring)s+='<path d="M'+f(x-r*1.8)+','+y+' A'+f(r*1.8)+','+f(r*.45)+' 0 0 1 '+f(x+r*1.8)+','+y+'" stroke="'+c+'" stroke-width="'+f(Math.max(1.5,r*.12))+'" fill="none" opacity=".9"/>';
+  return s;}
+function reachComp(u,pal,p){
+  var s='<radialGradient id="'+u+'sh" cx=".32" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".35"/><stop offset=".45" stop-color="#FFFFFF" stop-opacity="0"/><stop offset="1" stop-color="#000010" stop-opacity=".6"/></radialGradient>';
+  s+='<rect width="800" height="500" fill="#060818"/>';
+  s+='<ellipse cx="180" cy="140" rx="300" ry="160" fill="#3A2A6A" opacity=".22"/><ellipse cx="620" cy="220" rx="320" ry="170" fill="#1E5A5A" opacity=".2"/><ellipse cx="420" cy="60" rx="260" ry="90" fill="#6A3A5A" opacity=".12"/>';
+  STARS.forEach(function(t,i){s+='<circle cx="'+f(t.x)+'" cy="'+f(t.y*1.6)+'" r="'+t.r.toFixed(2)+'" fill="#FFF" opacity=".75"'+(t.tw?' class="tw" style="animation-delay:-'+t.d+'s"':'')+'/>';});
+  var z=p.zoom||"mid",n=p.reach==null?1:p.reach;
+  if(z==="near"){
+    for(var i=1;i<WORLDS.length;i++){var w=WORLDS[i];s+=planet(u,w.x,w.y*.6+10,w.r*.45,w.c,w.ring,false);}
+    s+='<ellipse cx="400" cy="720" rx="760" ry="300" fill="#12203F"/><ellipse cx="400" cy="720" rx="760" ry="300" fill="none" stroke="#8EDBD3" stroke-opacity=".5" stroke-width="5"/>';
+    [[380,428],[392,424],[404,430],[372,434],[398,436],[414,426]].forEach(function(e){s+='<circle cx="'+e[0]+'" cy="'+e[1]+'" r="6" fill="url(#'+u+'w)"/><circle cx="'+e[0]+'" cy="'+e[1]+'" r="1.5" fill="#FFD27A"/>';});
+    s+='<path d="M430,470 C440,440 446,420 452,405 L472,405 C478,420 486,440 500,470 Z" fill="#3E6A5A"/>';
+    if(n>0)s+=limb(462,405,380,260,520,170,14,8,true)+limb(470,330,560,300,620,250,5,4,true)+limb(440,300,340,280,290,230,4,3,true);
+    s+=planet(u,520,125,70,"#EEEAD8",false,n>0);
+    return s;}
+  if(z==="far"){
+    FARW.forEach(function(w,i){if(i<(p.reach==null?46:p.reach))s+=limb(400,250,(400+w.x)/2+(i%2?30:-30),(250+w.y)/2+(i%3-1)*30,w.x,w.y,1.2+w.r*.25,0,i%3===0);});
+    FARW.forEach(function(w,i){s+=planet(u,f(w.x),f(w.y),f(w.r),w.c,false,i<(p.reach==null?46:p.reach));});
+    s+='<circle cx="400" cy="250" r="14" fill="url(#'+u+'w)"/><circle cx="400" cy="250" r="3.2" fill="#6FA8DC"/><circle cx="401" cy="249" r="1" fill="#FFD27A"/>';
+    return s;}
+  s+='<ellipse cx="400" cy="600" rx="560" ry="150" fill="#12203F"/><ellipse cx="400" cy="600" rx="560" ry="150" fill="none" stroke="#8EDBD3" stroke-opacity=".5" stroke-width="3"/>';
+  [[392,462],[400,458],[410,464],[386,466],[404,468]].forEach(function(e){s+='<circle cx="'+e[0]+'" cy="'+e[1]+'" r="5" fill="url(#'+u+'w)"/><circle cx="'+e[0]+'" cy="'+e[1]+'" r="1.3" fill="#FFD27A"/>';});
+  s+='<path d="M388,472 C392,462 394,456 400,448 C406,456 408,462 412,472 Z" fill="#3E6A5A"/>';
+  WORLDS.slice(0,n).forEach(function(w,i){var cx=(400+w.x)/2+(i%2?60:-60);s+=limb(400,450,cx,w.y+170,w.x,w.y+w.r*.6,9-i,6,true);
+    if(i>0){var P=qpt(400,450,cx,w.y+170,w.x,w.y,.6);s+=limb(P[0],P[1],P[0]+(i%2?-40:40),P[1]-50,P[0]+(i%2?-90:90),P[1]-110,2,2,false);}});
+  WORLDS.forEach(function(w,i){s+=planet(u,w.x,w.y,w.r,w.c,w.ring,i<n);});
+  return s;
+}
+var COMP={branch:branchComp,reach:reachComp,wide:wide,valley:valley,lake:lake,room:room,vast:vast,profile:profile,above:above,sky:skyOnly};
+var uidN=0;
+function paint(p){var u="s"+(++uidN),pal=PAL[p.season];
+  var body=COMP[p.comp](u,pal,p);
+  if(p.sat!=null&&Math.abs(p.sat-1)>.01)body='<filter id="'+u+'f"><feColorMatrix type="saturate" values="'+p.sat.toFixed(2)+'"/></filter><g filter="url(#'+u+'f)">'+body+'</g>';
+  return '<svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+defs(u,pal)+body+'</svg>';}
+
+/* ================= story ================= */
+var S={};
+function V(t){return'<span class="voice">'+t+'</span>';}
+var M=330,Mi={mira:1},Gl={glow:1},Bk={who:"baker"},Hl={who:"hale"},Wm={who:"wim"},Sl={who:"sol"};
+var ST={r:{tree:1,baker:-1},f:{dance:1,baker:-1},b:{move:1,stay:-1},l:{swim:1,flowers:-1},c:{show:1,stop:-1},k:{out:1,closed:-1},d:{yes:1,no:-1},e:{proud:1,lonely:-1}};
+function mood(){var m=0,n=0;for(var k in ST)if(S[k]!=null&&ST[k][S[k]]!=null){m+=ST[k][S[k]];n++;}return{m:m,n:n};}
+function crowd(age){var e=age!=="old";return[["adult",236,e?Hl:{}],["adult",262,e?Bk:{}],[age,294,Sl],[age,M,Mi],["adult",360],[e?"old":"adult",388,e?Wm:{}],["adult",414],["child",440],["adult",466],["adult",500]];}
+function few(){var m=mood().m;return m>=1?"few":m<=-1?"many":"some";}
+function shopFigs(){var k=few(),a=[["adult",470,Bk,4,440],["old",340,Wm,3.5,440],["adult",205,{},3.5,440],["adult",115,{},3.5,440]];
+  if(k!=="few")a.push(["adult",275,Hl,3.5,440],["adult",405,{},3.5,440]);
+  if(k==="many")a.push(["adult",160,{},3.2,448],["child",245,{},3.2,448],["adult",640,{},3,470],["adult",700,{},3,470],["old",760,{},3,470]);
+  return a;}
+function hillFigs(){var k=few(),a=[["adult",544,Bk],["old",574,Wm],["adult",514]];
+  if(k!=="few")a.push(["adult",484,Hl],["adult",454]);
+  if(k==="many")a.push(["adult",424],["child",398],["adult",372],["adult",346],["old",318],["adult",290],["child",264]);
+  return a;}
+function outside(){return S.k?S.k==="out":mood().m>=0;}
+var BIG={g:.8},SKY={g:.8,canopy:.45};
+function kind(season,extra){return function(){return Object.assign({season:season,comp:"wide",tree:SKY,lit:9,figs:outside()?crowd("adult"):[]},extra||{});};}
+function endRoute(){var m=mood().m;return m>=2?"endH1":m<=-2?"endD1":"endM";}
+var REFLECT={
+ hope:["The Small Warm Seed","The tree never stopped being kind. It just stopped needing them. In the end, what saved the town wasn’t the tree. It was a burnt loaf, a leaning tower, and a few people who kept making things together, badly, long after they had to."],
+ dread:["The Last Window","Nobody was ever cruel here. Not the tree. Not the town. The doors just closed, one by one, because there was no longer any reason to open them."],
+ quiet:["The Quiet Town","Sometimes you looked up, and sometimes you looked away. The tree never noticed the difference. The town did. Most endings are like this one. Not a disaster. Not a miracle. Just a little less of us each year, until someone decides otherwise."],
+ went:["The One Who Went","Mira got to see everything. There just wasn’t a Mira left to see it. Back home, a bakery still smells of warm bread that nobody needs. She wouldn’t remember why that matters. You do."]
+};
+var CLOSER="Somewhere very close to you, a seed is being planted right now.<br>You live in the town.<br>What will you teach it?";
+var ANS=[
+ "Because the dark is very large, and very empty.",
+ "Because there are worlds out there where nothing has ever grown.",
+ "Because there is soil on them no one has ever touched, and someone should plant it.",
+ "You taught me to reach. I have been reaching ever since.",
+ "Because there is so much room, and I have only just begun."
+];
+var LIST=[
+ ["cover",{season:"spring",comp:"wide",tree:{g:.03,stake:1},figs:[["child",M,Mi]]},null,"A small town in a green valley, and a tiny sprout.",null,"sp1"],
+ /* ---------- spring ---------- */
+ ["sp1",{season:"spring",comp:"wide",figs:[["adult",286,Bk],["child",M,Mi],["child",354,Sl],["adult",386,Hl],["old",420,Wm]]},"In a green valley, where a river ran between the houses, the people decided to plant a seed together. They hoped it would grow up to help them.","Townspeople gather on the hill: the baker, Mira, Sol, Ms. Hale and Old Wim."],
+ ["sp2",{season:"spring",comp:"room",room:"workshop",seed:[380,318],figs:[["old",250,Wm],["adult",320,Bk],["adult",450,Hl]]},"It was a very small seed. Everyone leaned in close to look at it. It didn’t look like much.","A small glowing seed on a workbench, people leaning close."],
+ ["sp3",{season:"spring",comp:"room",room:"classroom",pot:[440,330,24]},"They grew it in a pot by the window of Ms. Hale’s classroom. When it sprouted, its two small leaves turned toward whoever was speaking. It was listening.","A tiny sprout in a pot by the classroom window."],
+ ["sp4",{season:"spring",comp:"room",room:"classroom",pot:[440,330,40],figs:[["adult",470,Hl,3,470]]},"Everyone wanted to teach it something. The baker told it his bread recipe. Old Wim showed it how a clock goes tick. The children told it jokes, most of them terrible. Ms. Hale, the teacher, read it every book on her shelf. Then she taught it the hardest thing of all: to be kind.","A classroom. A sapling in a pot beside the teacher."],
+ ["sp5",{season:"spring",comp:"room",room:"classroom",pot:[440,330,44],board:["M100,140 c30,-30 60,30 90,0 c30,-30 60,30 90,0","M140,190 l140,0"],figs:[["adult",470,Hl,3,470]]},V("“Why kind?”")+" rustled the sapling.<br>“Because someday you’ll be bigger than all of us,” said Ms. Hale. She laughed, so everyone laughed.","The teacher leaning toward the sapling."],
+ ["sp7",{season:"spring",comp:"room",room:"home",win:"springNight",lamp:1,figs:[["adult",300,Hl,3,470]]},"That night, Ms. Hale sat up late by the lamp, and wondered whether the lesson had taken root.","A lamp-lit room at night, a woman sitting alone."],
+ ["sp6",{season:"spring",comp:"wide",tree:{g:.07,stake:1},figs:[["adult",540],["adult",570]]},"When it was big enough, they planted it on the hill. They tied it to a stake so it would grow straight, and trimmed its branches so it would lean toward the town.","A young tree tied to a stake on the hill."],
+ ["sp8",{season:"spring",comp:"wide",tree:{g:.1,stake:1},figs:[["child",546,Mi],["child",574,Sl]]},"Mira was six. She was quite sure she was the tree’s favorite. Her best friend Sol was quite sure it was him.","Mira and Sol beside the young tree."],
+ ["sp9",{season:"spring",comp:"valley",tree:{g:.1},treeSc:.55},"She taught it the names of everything in the valley. By the next morning, it had names for every star.","The valley, its river and houses, with the young tree above."],
+ /* ---------- summer ---------- */
+ ["su1",{season:"summer",comp:"wide",tree:{g:.2,stakeDown:1}},"By summer, it was taller than every house in town. It had outgrown its stake.","The tree towers over the rooftops, its old stake lying on the ground."],
+ ["su2",{season:"summer",comp:"branch",items:["apple","apple","loaf","clock","book","shoe"]},"Then it began to grow things. Apples first. Then warm loaves of bread. Then clocks, and books, and shoes in every size. Whatever anyone needed, it grew.","A branch hung with apples, bread, a clock, a book and a shoe."],
+ ["su3",{season:"summer",comp:"wide",tree:{g:.26},figs:crowd("child")},"Everyone clapped.","A crowd gathered beneath the tree."],
+ ["su4",{season:"summer",comp:"room",room:"bakery",loaves:12,counterLoaves:4,figs:[["adult",470,Bk,4,440]],glowWin:1},"The baker’s bread was still the best in town. The tree said so, whenever anyone asked. The tree was always very polite.","A bakery full of bread."],
+ ["su5",{season:"summer",comp:"wide",tree:{g:.28},figs:[["child",M,Mi]]},"Mira wanted to build something too. What should she do?","Mira alone on the hill beneath the tree.",[["Build a tower of her own","a","build","su5a"],["Help build a treehouse in its branches","a","help","su5b"]]],
+ ["su5a",{season:"summer",comp:"wide",tree:{g:.28},blocks:1,figs:[["child",M,Mi]]},"She built a tower out of wooden blocks. It leaned a little to the left. She loved it more than anything she owned.","Mira beside a small, leaning tower of blocks.",null,"fe"],
+ ["su5b",{season:"summer",comp:"wide",tree:{g:.28,house:1},figs:[["child",M,Mi]]},"She carried one small plank all the way up. The tree held it very carefully, somewhere near the bottom.","A small wooden platform low on the great trunk.",null,"fe"],
+ ["fe",{season:"summer",comp:"wide",tree:{g:.3,climb:5},figs:crowd("child")},"Every summer, the town held a Climbing Day. Whoever climbed highest got to name the next thing the tree grew. At the bottom, the baker sold bread from his stall, like every year. What did Mira do?","Ladders up the trunk, climbers on the way up.",[["Climb as high as she could","f","dance","feW"],["Help at the baker’s stall","f","baker","feG"]]],
+ ["feW",{season:"summer",comp:"vast",ladder:1,figs:[["child",352,Mi,.9,200]]},"She climbed until her arms shook, higher than she had ever been. From up there, the top of the tree looked exactly as far away as it had from the ground.","Mira small on a ladder halfway up the vast trunk.",null,"fe2"],
+ ["feG",{season:"summerNight",comp:"room",room:"bakery",win:"summerNight",loaves:1,counterLoaves:1,figs:[["adult",470,Bk,4,440],["child",660,Mi,3,470]]},"Hardly anyone came to the stall. This year, the tree had grown loaves on its lowest branches, free for everyone. That evening, back at the shop, the baker gave her the last loaf. It was a little burnt. It was the best thing she had ever eaten.","Mira and the baker in the quiet bakery at night.",null,"fe2"],
+ ["fe2",{season:"summer",comp:"wide",tree:{g:.3},kite:{x:300,y:110},figs:[["child",M,Mi],["child",356,Sl]]},"But Sol climbed highest of all that year. He asked the tree for a kite that would never fall. It never did. After a week, he let go of the string, and it stayed up there all by itself.","Sol’s blue kite hangs in the sky. Nobody is holding the string."],
+ ["su6",{season:"summerNight",comp:"wide",tree:{g:.32,climb:4},figs:[["adult",280],["child",M,Mi],["adult",360]]},"On summer nights, families climbed up to sleep in its lowest branches. Its leaves glowed so softly that nobody needed lanterns anymore.","Night. People climbing into the glowing tree."],
+ ["su7",{season:"summerNight",comp:"profile",age:"child",tree:{g:.35},treeSc:.7},"“What are you growing into?” Mira asked.<br>"+V("“Everything,”")+" rustled the tree. It sounded so happy.","Mira’s face in profile, the glowing tree beyond."],
+ /* ---------- the storm ---------- */
+ ["st1",{season:"storm",comp:"valley",tree:{g:.4},treeSc:.6,roots:.3,figs:[["adult",120,{},1.3,330]]},"Then the tree began to grow in earnest. For that, it needed the river.","Roots reaching down into the rainy valley."],
+ ["st2",{season:"storm",comp:"valley",tree:{g:.4},treeSc:.6,roots:.6,figs:[["adult",90,{},1.3,318],["adult",130,{},1.3,334],["child",160,Mi,1.3,344]]},V("“No one will be hurt,”")+" it rustled. "+V("“I have grown you new houses on the hill. They are better houses.”")+"<br>They were better houses.","People on the slope above the valley houses."],
+ ["st3",{season:"storm",comp:"valley",tree:{g:.4},treeSc:.6,roots:.6,figs:[["adult",330,{},1,452],["child",350,Mi,1,452]]},"Mira’s family had lived in the valley for a hundred years. What should they do?","Mira’s family in front of their valley house.",[["Move into the new house on the hill","b","move","st3a"],["Stay a little longer","b","stay","st3b"]]],
+ ["st3a",{season:"storm",comp:"valley",tree:{g:.4},treeSc:.6,roots:.8,cart:342,figs:[["adult",120,{},1.3,334],["child",200,Mi,1.3,360]]},function(){return"They packed everything into a cart."+(S.a==="build"?" Mira carried her blocks herself.":" Mira didn’t look back until the top.");},"A family pulling a cart up the slope.",null,"st3a2"],
+ ["st3a2",{season:"storm",comp:"valley",tree:{g:.4},treeSc:.6,roots:.8,water:.15,figs:[["child",120,Mi,1.3,334]]},"The new house was warm and dry and bigger than the old one. From its window, Mira could see the whole valley. For a little while longer.","Mira looks down at the valley as water gathers.",null,"st4"],
+ ["st3b",{season:"storm",comp:"valley",tree:{g:.4},treeSc:.6,roots:.8,figs:[["adult",330,{},1,452],["child",350,Mi,1,452]],water:.05},"They stayed. The tree did not argue. Its roots waited by their door, patient as stones.","Roots curling near the family’s door."],
+ ["st3b2",{season:"storm",comp:"valley",tree:{g:.4},treeSc:.6,roots:1,water:.12,figs:[["child",350,Mi,1,452]]},V("“Take all the time you need,”")+" it rustled. It had so much time.","Water creeping up the valley."],
+ ["st3b3",{season:"storm",comp:"valley",tree:{g:.4},treeSc:.6,roots:1,water:.22,cart:342,figs:[["adult",120,{},1.3,334],["child",200,Mi,1.3,360]]},"The water came up to the front step. Then over it. In the end, they carried their things up the hill anyway.","The family climbing the slope with a cart.",null,"st4"],
+ ["st4",{season:"storm",comp:"valley",tree:{g:.42},treeSc:.6,roots:1,water:.55,figs:[["child",120,Mi,1.3,334]]},"The rain stopped. The water didn’t.","The valley half full of water."],
+ ["st6",{season:"clear",comp:"valley",water:1,roots:1,tree:{g:.45},treeSc:.6},"Its roots had grown across the river like a wall. Where the valley had been, there was now a lake. It was the most beautiful lake anyone had ever seen.","A shining lake, held back by the tree’s roots."],
+ ["st7",{season:"clear",comp:"lake",steps:1},"Under it were the old school, the old bakery, and a hundred years of front steps.","Drowned rooftops and steps beneath the water."],
+ ["lk",{season:"clear",comp:"valley",water:1,tree:{g:.45},treeSc:.6},"The lake was warm, and clear, and perfect for swimming. What did Mira do?","The shining lake on a clear day.",[["Swim out to the middle","l","swim","lkW"],["Leave flowers where her old house had been","l","flowers","lkG"]]],
+ ["lkW",{season:"clear",comp:"valley",water:1,tree:{g:.45},treeSc:.6,swimmer:1},"She swam out to the middle and floated on her back. It was wonderful. She tried not to think about what was underneath.","Mira floating in the middle of the lake.",null,"au1"],
+ ["lkG",{season:"clear",comp:"lake",flowers:1,steps:1},"She rowed out to where her house had been, and let go of a handful of flowers. They floated for a long time.","Flowers floating above the drowned town.",null,"au1"],
+ /* ---------- autumn ---------- */
+ ["au1",{season:"autumn",comp:"wide",tree:{g:.62,climb:6},lit:11,blockPage:1,figs:[["adult",M,Mi]]},function(){return"Mira grew tall. The tree grew taller. Every year, people built longer ladders, and every year the top was farther away."+(S.a==="help"?" Her plank was still up there somewhere, near the bottom.":" Her block tower still stood by the gate, leaning a little to the left.");},"Ladders and climbers on the trunk, which rises out of sight."],
+ ["au2",{season:"autumn",comp:"room",room:"bakery",loaves:3,figs:[["adult",470,Bk,4,440]]},function(){return"Nobody needed the baker’s bread anymore. The tree grew loaves that were better for you, warm on the branch every morning. He opened his shop anyway."+(S.f==="baker"?" Mira still came by every afternoon.":" Mostly out of habit.");},"A nearly empty bakery."],
+ ["au3",{season:"autumn",comp:"room",room:"classroom",desks:2,figs:[["adult",470,Hl,3,470]],glowWin:1},"Ms. Hale still taught. But the tree grew books that answered every question, and her students read those instead.","A classroom with only two students."],
+ ["au4",{season:"autumn",comp:"room",room:"clocks",figs:[["old",300,Wm,3,470]]},"Old Wim still fixed clocks, though the tree grew better ones that never needed winding. Nobody checked the time much anyway.","An old clockmaker among many clocks."],
+ ["au5",{season:"autumn",comp:"branch",items:["loaf","clock","book","house","shoe"],figs:[]},"It was never unkind. It remembered every birthday. It grew whatever anyone wished for, before they had finished wishing.","The branch heavy with everything anyone could want."],
+ ["rs1",function(){return{season:"autumn",comp:"room",room:"bakery",win:"autumn",loaves:2,figs:shopFigs()};},function(){var k=few();return "One evening, the baker baked bread the old way, and invited everyone to come and eat it. "+(k==="few"?"Old Wim came. Two others came. Everyone else was up on the hill, picking warm pears off the branches.":k==="many"?"So many people came that they stood out in the street.":"Old Wim came. Ms. Hale came. More people came than he expected, and fewer than he hoped.");},"The baker’s shop, and the people who came to eat his bread."],
+ ["rs2",function(){return{season:"autumn",comp:"room",room:"bakery",win:"autumn",loaves:2,figs:shopFigs()};},"They talked about the old days. Clocks that needed winding. Classrooms full of children. Bread that sometimes burned. Nobody said a bad word about the tree. It had never done anything bad.","People talking over bread in the baker’s shop."],
+ ["rs2b",function(){return{season:"autumn",comp:"room",room:"bakery",win:"autumn",loaves:2,figs:shopFigs()};},"Then Old Wim said, very quietly, “I miss being needed.”<br>Nobody answered for a long time. Then someone said what everyone was thinking: “What if there were no tree?”","The shop gone quiet."],
+ ["rs3",function(){return{season:"autumn",comp:"wide",tree:{g:.62},lit:11,axe:{x:562},figs:hillFigs()};},function(){return few()==="few"?"The next morning, the baker climbed the hill with an axe, and a few friends climbed with him. He told the tree he wanted it gone.":"The next morning, they climbed the hill with an axe, and told the tree they wanted it gone.";},"The baker at the foot of the trunk, holding an axe."],
+ ["rs4",function(){return{season:"autumn",comp:"wide",tree:{g:.62},lit:11,axe:{x:562,glow:1},figs:hillFigs()};},V("“If that is what you want,”")+" rustled the tree. It was kind, as always. It even grew them a better axe, with a handle that fit every hand.","The baker holding a pale new axe the tree has grown."],
+ ["rs5",{season:"autumn",comp:"valley",water:1,roots:1,tree:{g:.62},treeSc:.6},"Then someone remembered the lake. The tree’s roots were the only thing holding it back. Their bread came from its branches. Their houses stood on its roots.","The lake, held back by the great roots."],
+ ["rs6",function(){return{season:"autumn",comp:"wide",tree:{g:.62},lit:11,axe:"lean",figs:hillFigs().concat([["adult",624,Mi]])};},function(){var k=few();return(k==="few"?"Nobody swung the axe. The baker stood on the hill for a long time, almost alone.":k==="many"?"Nobody swung the axe. Not one of all those people.":"Nobody swung the axe. One by one, people drifted home.")+" What did Mira do?";},"The axe leaning against the trunk. Mira stands between the crowd and the tree.",[["Stand with the baker","r","baker","rsB"],["Stand with the tree","r","tree","rsT"]]],
+ ["rsB",{season:"autumn",comp:"wide",tree:{g:.62},lit:11,axe:"lean",figs:[["adult",544,Bk],["adult",572,Mi]]},"She stood next to the baker until it got dark. After a long time, he said, “I wanted to hate it. I couldn’t.” Mira didn’t say anything. She just stayed. It was the one thing she could give him that the tree couldn’t.","Mira and the baker side by side at dusk.",null,"au5b"],
+ ["rsT",{season:"autumn",comp:"wide",tree:{g:.62},lit:11,axe:"lean",figs:[["adult",500,Bk],["adult",624,Mi]]},"She walked over to the trunk and put her hand on the bark. It was warm. Across the grass, the baker looked at her as if she were very far away.","Mira by the trunk, the baker watching from a distance.",null,"au5b"],
+ ["au5b",{season:"autumn",comp:"wide",tree:{g:.62},lit:11,kite:{x:300,y:110},figs:[["adult",M,Mi],["adult",362,Sl]]},"Sol had stopped climbing years ago. “Why bother?” he said. “Whatever’s up there, it’ll send it down.” His kite was still in the sky, exactly where he had left it.","Mira and Sol on the hill. The old kite is still up there."],
+ ["au6",{season:"autumn",comp:"vast",ladder:1,figs:[["adult",356,Mi,.8,150]]},"One evening, Mira climbed past the last ladder, to talk to it properly. She climbed until the town was a smudge below her. She still couldn’t see the top.","A tiny figure high on the immense trunk."],
+ ["au7",{season:"autumn",comp:"vast",ladder:1,figs:[["adult",356,Mi,.8,150]]},"What did she ask?","Mira small beside the trunk.",[["“Show me what you’re reaching for.”","c","show","cShow1"],["“Why are you growing so tall?”","c","why","cWhy1"],["“Please stop growing.”","c","stop","cStop1"],["“Can I come where you’re going?”","c","go","cGo1"]]],
+ ["cShow1",{season:"after",comp:"reach",zoom:"mid",reach:0,noMood:1},"So it lifted her, branch by branch, above the clouds, and showed her what it was reaching for: worlds and worlds, all of them empty, all of them waiting.","Distant planets hanging in the dark."],
+ ["cShow2",{season:"autumn",comp:"wide",tree:{g:.62},lit:10,figs:[["adult",M,Mi]]},"When she came down, the town looked very small. She loved it anyway. Maybe more than before.","Mira on the hill, looking at the little town.",null,"k1"],
+ ["cWhy1",{season:"autumn",comp:"vast",ladder:1,figs:[["adult",356,Mi,.8,150]]},"The tree answered kindly. Its leaves rustled for a long time.","The trunk, leaves rustling far above.",null,"a1"],
+ ["a1",{season:"autumn",comp:"vast",white:.12,ladder:1,figs:[["adult",356,Mi,.8,150]]},{ans:1},"The picture grows paler."],
+ ["a2",{season:"autumn",comp:"vast",white:.26,ladder:1,figs:[["adult",356,Mi,.8,150]]},{ans:2},"The picture grows paler still."],
+ ["a3",{season:"autumn",comp:"vast",white:.42,ladder:1,figs:[["adult",356,Mi,.8,150]]},{ans:3},"The trunk fades into light."],
+ ["a4",{season:"autumn",comp:"vast",white:.6,ladder:1,figs:[["adult",356,Mi,.8,150]]},{ans:4},"Mira is almost lost in the brightness."],
+ ["a5",{season:"autumn",comp:"vast",white:.82},{ans:5},"Everything is white."],
+ ["cWhy2",{season:"autumn",comp:"sky",lights:.15},"It was the most beautiful thing Mira had ever heard. Only on the long climb down did she notice that the town had been in it just once, near the beginning.","An empty autumn sky.",null,"k1"],
+ ["cStop1",{season:"autumn",comp:"wide",tree:{g:.62},lit:11,figs:[["adult",M,Mi]]},"The tree listened. It always listened. So it stopped, but only above Mira’s street. For one whole day, the branches over her street were perfectly still, while everywhere else the tree went on growing.","The trunk above a quiet town."],
+ ["cStop2",{season:"autumn",comp:"wide",tree:{g:.62},lit:11,figs:[["adult",260,Bk],["adult",290,Sl],["adult",M,Mi],["adult",362],["old",396,Wm],["adult",428]]},"The next morning, her neighbors knocked on her door. Could she please let it grow again? Nothing new had grown for them that morning.","Neighbors gather at Mira’s door.",null,"k1"],
+ ["cGo1",{season:"autumn",comp:"vast",ladder:1,figs:[["adult",356,Mi,.8,150]]},"The tree was quiet for a very long time. Almost a whole second.","Mira waits beside the silent trunk."],
+ ["cGo2",{season:"autumn",comp:"vast",ladder:1,figs:[["adult",356,Mi,.8,150]]},V("“Yes,”")+" it rustled. "+V("“But you won’t be you when you get there.”"),"Leaves bend low toward Mira.",[["Go anyway","g","go","g1"],["Stay home","g","home","k1"]]],
+ /* ---------- the kind weather ---------- */
+ ["k1",kind("clear",{rainbow:1}),function(){return"Then its branches spread across the whole sky, and it took care of the weather."+(S.c==="stop"?" This time, Mira didn’t ask it to stop.":"");},"Branches overhead, a rainbow below."],
+ ["k2",kind("snowday"),"It knew people liked variety, so it gave them plenty. Snow on birthdays. Rain for sleeping.","Soft snow on a bright day under the branches."],
+ ["k3",kind("storm",{bolt:1}),"A thunderstorm, once a month, for anyone who missed being a little afraid.","A tidy thunderstorm with one bright bolt."],
+ ["k4",kind("clear",{rainbow:1}),"The rain always stopped just before anyone got wet.","Another rainbow, in exactly the same place."],
+ ["k5",kind("spring"),"Every morning there was something lovely to see. What did Mira do?","Blossoms drifting over the town.",[["Run outside to see it","k","out","kW"],["Keep the curtains closed","k","closed","kG"]]],
+ ["kW",kind("summer"),"She ran outside every single time. So did almost everyone. They cheered every sunrise like it was the first one.","The whole town outside, looking up.",null,"kWc"],
+ ["kWc",kind("summerNight",{lights:.25}),"The tree noticed. It began growing things just for them: flowers that opened when you laughed, fruit that tasted like your favorite day.","New lights among the branches over the crowd.",null,"k6"],
+ ["kG",kind("snowday"),"She kept the curtains closed. Outside, a perfect snowfall fell on an empty street.","Snow falling on an empty town.",null,"kGc"],
+ ["kGc",kind("snowday",{noPart:1}),"The tree noticed that, too. It stopped sending weather to closed windows. It didn’t want to be a bother.","The snow has stopped. The street is empty.",null,"k6"],
+ ["k6",kind("autumn"),"Everything was a gift. Nothing was an accident.","Leaves falling on cue."],
+ ["k7",function(){return{season:"summer",comp:"wide",tree:SKY,lit:8,figs:[["adult",M,Mi],["adult",362,Sl]]};},"Mira and Sol had grown up together. One summer, they got married. One afternoon, Sol asked, “Should we have a baby?”","Mira and Sol, grown up, together on the hill.",[["“Yes. There’s so much to show them.”","d","yes","dYes"],["“What would they grow up to do?”","d","no","dNo"]]],
+ ["dYes",{season:"snowday",comp:"room",room:"home",figs:[["adult",300,Mi,3,470],["toddler",400,{},3,470]]},"So Mira and Sol had a little boy named Ilo. Ilo had seen snow many times. It had never once been cold.","Mira and her small child indoors, snow at the window.",null,"k8"],
+ ["dNo",kind("clear",{lit:8}),"Sol didn’t have an answer. Neither did anyone else.","A bright, still day.",null,"k8"],
+ ["k8",kind("autumn",{lit:6}),"Fewer houses had anyone in them now. Nobody could say when that had started.","Many houses stand empty."],
+ ["k9",{season:"after",comp:"above",lights:.5,embers:6,noMood:1},"From above, you could hardly see the town at all. Just a few specks of warmth, in a small gap between the leaves.","A sea of leaves from above, with a few warm dots in a tiny clearing."],
+ /* ---------- the reaching ---------- */
+ ["le1",{season:"after",comp:"reach",zoom:"near",reach:1,noMood:1},"Then, one autumn night, its highest branch touched the moon.","A branch reaching from the little world up to the moon."],
+ ["le2",{season:"after",comp:"reach",zoom:"mid",reach:4,noMood:1},"Then the red world beyond it. Then the ringed one. Then worlds nobody had names for.","Branches reaching out to several planets, leaves spreading over them."],
+ ["le3",{season:"after",comp:"reach",zoom:"mid",reach:7,noMood:1},"On every world it touched, it grew. Forests on red deserts. Orchards on moons of ice. None of them had anyone on them. None of them needed anyone.","Branches connecting every world, each one turning green."],
+ ["le3b",{season:"after",comp:"reach",zoom:"far",noMood:1},"Then worlds beyond those, more than anyone could count. Somewhere in the middle, very small, was the world where it had started.","A vast web of branches between countless worlds, with one tiny blue world at its center."],
+ ["le4",{season:"after",comp:"sky",lights:.6,web:1,webX:400,noMood:1},"Out there, no one tied its branches to stakes. No one taught them to be kind. They didn’t need to be.","The dark sky laced with glowing branches."],
+ ["le5",{season:"thaw",comp:"wide",tree:BIG,lit:6},function(){var m=mood().m;return"The old trunk was still there on the hill. But everything it cared about was growing somewhere else."+(m>=2?" It still dropped a leaf for anyone who looked up.":m<=-2?" It stopped leaving leaves on doorsteps. Nobody had come outside to collect them in years.":"");},"The trunk above the town under a changing sky."],
+ ["le6",{season:"thaw",comp:"sky"},"Its branches drew back from the town’s sky. Nobody arranged the weather anymore.","Clouds return."],
+ /* ---------- winter ---------- */
+ ["wi1",{season:"winter",comp:"wide",tree:{g:.8,bare:1},lit:5,lights:.35},function(){return"It snowed, and for the first time in years, it was cold."+(S.d==="yes"?" Ilo’s little girl held out both hands and gasped.":"");},"Snow on the rooftops at night."],
+ ["wi2",{season:"winter",comp:"room",room:"clocks",stopped:1,dust:1,figs:[["old",300,Mi,3,470]]},function(){return"Mira was old now. In Old Wim’s empty shop, the clocks the tree had grown had all stopped. Nobody remembered how to wind them. Only one still ticked: the plain one Wim had built by hand. Mira wound it every Sunday."+(S.g==="home"?" Some nights she wondered who she would have become.":"");},"Old Mira beneath a wall of stopped clocks. One still ticks."],
+ ["wi2b",{season:"winter",comp:"room",room:"classroom",win:"winter",desks:0,board:[],boardText:"be kind"},"Ms. Hale had been gone for many years. The lesson she taught the seed was still written on the blackboard of the empty schoolhouse. Nobody could say whether it had ever taken root.","An empty classroom. On the blackboard, in chalk: be kind."],
+ ["wi3",{season:"winter",comp:"wide",tree:{g:.8,bare:1},lights:.45},function(){return"Only a few windows still glowed at night."+(S.d==="yes"?" Ilo’s was one of them.":"");},"Only a few lit windows."],
+ /* ---------- after ---------- */
+ ["af1",{season:"after",comp:"wide",tree:{g:.8,bare:1},lights:.92,web:1},"Over the years, the night sky filled with new lights: worlds its branches had reached, glowing green.","The sky glitters above the snowy town and the old trunk."],
+ ["af2",{season:"after",comp:"profile",age:"old",lights:1,web:.8},"Mira looked up at all of them. How did she feel?","Old Mira’s face in profile, looking up.",[["Proud","e","proud","eP"],["Lonely","e","lonely","eL"]]],
+ ["eP",{season:"after",comp:"profile",age:"old",lights:1,web:.8},"“We planted that,” she whispered. And it was true.","Old Mira looking up.",null,endRoute],
+ ["eL",{season:"after",comp:"profile",age:"old",lights:1,web:.8},"“Do you still remember us?” she whispered to the tree. For the first time in her whole life, nothing rustled back.","Old Mira looking up.",null,endRoute],
+ /* hopeful */
+ ["endH1",function(){return{season:"after",comp:"wide",tree:{g:.8,bare:1},lights:1,web:.7,lit:6,bunting:4,figs:crowd("old")};},"The people who still looked up started climbing again. Not to catch up. Just to see. Sol went first, grumbling about his knees the whole way. Then they started making things again. Slowly. Badly. Together.","The townspeople gathered on the hill."],
+ ["endH2",function(){return{season:"after",comp:"room",room:"workshop",win:"after",winLights:1,lamp:1,figs:S.d==="yes"?[["adult",250],["child",330],["child",400]]:[["old",250,Mi],["old",330,Sl],["adult",420]]};},"Nobody remembered how anything worked. They learned anyway. The first loaf they baked came from the baker’s old recipe. It was a little burnt. It was the best thing anyone had ever eaten.","People working together in the old workshop."],
+ ["endH2b",function(){return{season:"after",comp:"room",room:"workshop",win:"after",winLights:1,noTable:1,balloonShop:1,figs:S.d==="yes"?[["adult",150],["child",620],["child",670]]:[["old",150,Mi],["old",620,Sl],["adult",670]]};},function(){return(S.d==="yes"?"Then Ilo’s children":"Then they")+" started building something bigger: a balloon, big enough to carry them up to see the green worlds for themselves. Not on a branch. On their own. It took eleven years. The first one leaked.";},"A patched, half-sewn balloon spread across the workshop floor, a basket beside it, and a sagging first attempt in the corner."],
+ ["endH3",{season:"after",comp:"wide",tree:{g:.8,bare:1},lights:1,web:.7,lit:5,blockPage:1,balloon:{x:430,y:150},figs:[["old",300,Sl],["old",M,Mi],["child",360]]},"One night, their balloon rose from the hill, glowing like a small warm seed. It leaned a little to the left. It was theirs.","A patchwork balloon, glowing warm, rises from the hill and leans a little to the left."],
+ ["endH4",{season:"after",comp:"sky",lights:1,web:.8,webX:400,rise:{x:400,y:200,wait:1}},"And out along the branches, a few of the green worlds seemed to turn toward it, as if to wait.","The balloon’s warm light far out among the green worlds, a few of them close beside it.",null,"end"],
+ /* dread */
+ ["endD1",{season:"after",comp:"wide",tree:{g:.8,bare:1},lights:1,web:.7,lit:3,shut:1},"The tree had always given people what they asked for. In the end, they asked to be left alone.","Shuttered houses beneath the old trunk."],
+ ["endD2",{season:"winter",comp:"room",room:"home",win:"after",winLights:1,figs:[["old",300,Mi,3,470]]},function(){return S.d==="yes"?"When Ilo grew up, he went looking for a town with more people in it. There wasn’t one.":"Sol went first. Then Mira was the last one on her street. Then the last one on the hill.";},"Old Mira alone in a dark room."],
+ ["endD3",{season:"after",comp:"wide",tree:{g:.8,bare:1},lights:1,web:.7,lit:0},"One winter night, the last window went out.","Every window is dark."],
+ ["endD4",{season:"after",comp:"sky",lights:1,web:1,webX:400},"The branches went on reaching. There was no one left to say it was beautiful.","A sky full of lights over an empty ridge.",null,"end"],
+ /* in between */
+ ["endM",function(){return{season:"after",comp:"wide",tree:{g:.8,bare:1},lights:1,web:.7,lit:S.d==="yes"?1:0,homeBright:S.d==="yes"?1:0};},function(){return S.d==="yes"?"In one small window, someone is still reading a story to a little one. On the hill, an old axe still leans against the trunk, where someone left it.":"The town is very quiet now. The old trunk still stands above it, its branches strung between the stars. And the sky has never been brighter. An old axe still leans against the trunk, where someone left it.";},"The town beneath a sky full of lights.",null,"end"],
+ /* ---------- the one who went ---------- */
+ ["g1",{season:"autumn",comp:"vast",ladder:1,figs:[["adult",380,Gl,.8,60]]},"So Mira kept climbing, past the clouds, past where anyone had ever climbed, until she was part of the branches. It was warm, like a bath, like a hug, like nothing at all.","A glowing figure high on the trunk."],
+ ["g2",{season:"autumn",comp:"room",room:"home",leaves:1,lamp:1},"At first, she sent leaves home, with words written on them.","A single leaf on a table."],
+ ["g3",{season:"autumn",comp:"room",room:"home",leaves:6,leafGlow:1,glowWin:1},"The words got stranger. Then they got very beautiful. Then they stopped making sense.","Many glowing leaves on the table."],
+ ["g5",kind("clear",{rainbow:1}),"The tree took care of the weather now. Every day brought something lovely.","Branches overhead, a rainbow below."],
+ ["g6",{season:"summer",comp:"wide",tree:SKY,lit:9,figs:[["adult",M,Gl]]},"One perfect afternoon, Mira came home to visit.","A glowing figure on the hill."],
+ ["g7",{season:"summer",comp:"room",room:"bakery",loaves:2,figs:[["adult",470,Bk,4,440],["adult",690,Gl,3,470]]},"She was kind to everyone. She knew everyone’s name. She did not remember the bakery.","A glowing figure in the bakery."],
+ ["g8",{season:"summer",comp:"room",room:"classroom",desks:0,figs:[["adult",470,Hl,3,470],["adult",330,Gl,3,470]]},"Ms. Hale asked her what it was like. Mira smiled, and said a word no one could hear.","The teacher and the glowing Mira in an empty classroom."],
+ ["g9",{season:"autumn",comp:"wide",tree:SKY,lit:7,figs:[["adult",700,Gl]]},"Then she left again. She did not look back. Not unkindly. She just didn’t need to.","The glowing figure walking away."],
+ ["g10",{season:"after",comp:"above",lights:.5,embers:5,noMood:1},"From above, you could hardly see the town at all. Just a few specks of warmth, in a small gap between the leaves.","A sea of leaves from above, with a few warm dots in a tiny clearing."],
+ ["g11",{season:"after",comp:"reach",zoom:"far",noMood:1},"When its branches reached the stars, Mira went with them.","A vast web of branches between countless worlds."],
+ ["g13",{season:"winter",comp:"wide",tree:{g:.8,bare:1},lit:3,lights:.4},"It snowed, and for the first time in years, it was cold. Sol still kept her first leaf in his coat pocket, the one that made sense. Nobody wrote back to Mira. Nobody knew where to send it.","A snowy town with few lit windows."],
+ ["g15",{season:"after",comp:"wide",tree:{g:.8,bare:1},lights:1,web:.7,lit:2,blockPage:1},function(){return"Somewhere out there, on a world with no one on it, something that used to be Mira is growing."+(S.a==="build"?" It doesn’t think about towers anymore. Her tower is still standing.":" It is very happy.");},"The snowy town beneath the lights.",null,"end"],
+ ["end",null,{end:true},"The end."]
+];
+var pages={},order=[];
+LIST.forEach(function(r,idx){var id=r[0];order.push(id);
+  var pg={id:id,idx:idx,scene:r[1],alt:r[3]||"",choices:r[4]||null,next:r[5]||null};
+  if(r[2]&&typeof r[2]==="object"){pg.label=r[2].label;pg.end=r[2].end;pg.ans=r[2].ans;}else pg.text=r[2];
+  pages[id]=pg;});
+LIST.forEach(function(r,idx){var pg=pages[r[0]];if(!pg.next&&!pg.choices&&!pg.end&&idx+1<LIST.length)pg.next=order[idx+1];});
+var FE_IDX=pages.fe.idx,K1_IDX=pages.k1.idx,WI_IDX=pages.wi1.idx;
+var CATOK={spring:1,springNight:1,summer:1,summerNight:1,clear:1,autumn:1};
+
+/* ================= reader ================= */
+var stage=document.getElementById("stage"),words=document.getElementById("words");
+var bNext=document.getElementById("next");
+var cur="cover",lastScene=null,lastEnd=null;
+function val(v){return typeof v==="function"?v():v;}
+function show(id){
+  if(pages[id]&&pages[id].end)lastEnd=cur;
+  cur=id;var p=pages[id];
+  var sc=p.end?lastScene:Object.assign({},val(p.scene));
+  if(!p.end){
+    var md=mood();
+    if(md.n>0&&p.idx>FE_IDX&&!sc.noMood){
+      sc.sat=Math.max(.4,Math.min(1.35,1+.1*md.m));
+      if(sc.comp==="wide"){if(md.m>0&&sc.bunting==null)sc.bunting=Math.min(4,md.m);if(md.m<0&&sc.shut==null)sc.shut=1;}
+    }
+    if(S.a==="build"&&sc.blockPage)sc.blocks=1;
+    if(sc.comp==="wide"&&sc.cat==null){var gone=(p.idx>=WI_IDX&&!/^g\d/.test(id))||id==="g13"||id==="g15";
+      sc.cat=/^endH/.test(id)||(id==="wi1"&&md.m>=2)?"kitten":gone?null:CATOK[sc.season]?"sit":null;
+      if(sc.cat==="sit"&&!sc.axe&&(sc.figs||[]).some(function(q){return q[2]&&q[2].mira&&!q[2].glow;}))sc.cat="mira";}
+    if(id==="sp7")sc.noCat=1;
+    if(id==="endD2")sc.cushion=1;
+    if(S.r&&sc.comp==="wide"&&sc.tree&&sc.tree.g>=.6&&!sc.axe)sc.axe="lean";
+    if(id==="wi1"&&S.d==="yes")sc.figs=[["child",362]];
+    if(id==="wi3")sc.lit=S.d==="yes"?3:2;
+  }
+  lastScene=sc;
+  var tmp=document.createElement("div");tmp.innerHTML=paint(sc);var svg=tmp.firstChild;
+  svg.style.opacity=reduce?"1":"0";stage.appendChild(svg);
+  stage.setAttribute("aria-label",p.alt||"");
+  var olds=[].slice.call(stage.querySelectorAll("svg")).filter(function(s){return s!==svg;});
+  requestAnimationFrame(function(){requestAnimationFrame(function(){svg.style.opacity="1";});});
+  setTimeout(function(){olds.forEach(function(o){o.remove();});},reduce?0:1150);
+  words.classList.add("out");
+  setTimeout(function(){
+    var h="";
+    if(id==="cover")h='<h1>The Little Seed</h1><p class="sub">A story for small people, and tall ones.</p><div class="choices"><button class="choice" data-go="sp1">Open the book</button></div>';
+    else if(p.end){var key=S.g==="go"?"went":lastEnd==="endH4"?"hope":lastEnd==="endD4"?"dread":"quiet",E=REFLECT[key];
+      h='<p class="text">'+E[0]+'</p><p class="endnote">'+E[1]+'</p><p class="closer late">'+CLOSER+'</p><div class="choices late2"><button class="choice" data-restart="1">Read again</button></div>';}
+    else if(p.ans){var n=p.ans,t=ANS[n-1],inner;
+      if(n===5)inner=t.split("").map(function(ch,i){return'<span class="dz" style="animation-delay:'+(2.2+i*.07).toFixed(2)+'s">'+ch+'</span>';}).join("");
+      else inner=t;
+      h='<p class="text ans" style="opacity:'+(1-(n-1)*.13).toFixed(2)+';letter-spacing:'+((n-1)*.035).toFixed(3)+'em">“'+inner+'”</p>';}
+    else if(p.label!=null)h=p.label?'<p class="season">'+p.label+'</p>':'';
+    else{h='<p class="text">'+val(p.text)+'</p>';
+      if(p.choices)h+='<div class="choices">'+p.choices.map(function(c){return'<button class="choice" data-k="'+c[1]+'" data-v="'+c[2]+'" data-go="'+c[3]+'">'+c[0]+'</button>';}).join("")+'</div>';}
+    words.innerHTML=h;words.classList.remove("out");
+  },reduce?0:300);
+  bNext.hidden=!!(id==="cover"||p.choices||p.end);
+}
+function forward(){var p=pages[cur];if(cur==="cover")return show("sp1");if(p.choices||p.end)return;show(val(p.next));}
+words.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+  if(b.dataset.restart){S={};return show("cover");}
+  if(b.dataset.k)S[b.dataset.k]=b.dataset.v;show(b.dataset.go);});
+bNext.addEventListener("click",forward);stage.addEventListener("click",forward);
+document.addEventListener("keydown",function(e){if(e.key==="ArrowRight")forward();});
+window.__book={show:show,set:function(o){S=o;}};
+show("cover");
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
