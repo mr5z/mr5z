@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structuring a .NET MAUI App with MvvmEssentials</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PY5ZH4VCSK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-PY5ZH4VCSK');
+    </script>
+
+    <style>
+        html, body { height: 100%; }
+        body {
+            display: flex; flex-direction: column;
+            font-family: 'Lora', serif; background-color: #f5f4ee; color: #1a1a1a;
+        }
+        .site-nav {
+            background: linear-gradient(135deg, #bc6d11, #764ba2);
+            padding: 0.85rem 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+        }
+        .site-nav a { color: rgba(255,255,255,0.85); text-decoration: none; }
+        .site-nav a:hover { color: white; }
+        .site-nav .separator { color: rgba(255,255,255,0.4); margin: 0 0.5rem; }
+        .post-header { max-width: 720px; margin: 3rem auto 1.5rem; padding: 0 1.5rem; }
+        .post-header h1 { font-size: 2rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.75rem; }
+        .post-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #888; margin-bottom: 0.5rem; }
+        .post-tag {
+            display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+            background: #f0edf8; color: #764ba2; border-radius: 4px; padding: 2px 8px; margin-right: 4px;
+        }
+        .post-divider { max-width: 720px; margin: 1.5rem auto; padding: 0 1.5rem; border: none; border-top: 1px solid rgba(0,0,0,0.08); }
+        .post-body { max-width: 720px; margin: 0 auto 4rem; padding: 0 1.5rem; font-size: 1.05rem; line-height: 1.85; }
+        .post-body h2 { font-size: 1.25rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 0.75rem; font-family: 'JetBrains Mono', monospace; color: #764ba2; }
+        .post-body p { margin-bottom: 1.25rem; }
+        .post-body strong { font-weight: 600; }
+        .post-body em { font-style: italic; }
+        .post-body hr { border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 2.5rem 0; }
+        .post-body .footnote { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #888; }
+        .post-body a { color: #764ba2; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+        .post-body a:hover { color: #bc6d11; }
+
+        .post-body code {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+            background: #ece9e0; color: #764ba2; border-radius: 3px; padding: 0.1em 0.35em;
+        }
+        .post-body pre[class*="language-"] {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.6;
+            border-radius: 8px; padding: 1.1rem 1.3rem;
+            overflow-x: auto; margin-bottom: 1.5rem;
+        }
+        .post-body pre[class*="language-"] code { background: none; padding: 0; font-size: 1em; }
+        .post-body table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .post-body th, .post-body td { text-align: left; padding: 0.55rem 0.75rem; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .post-body th { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #764ba2; text-transform: uppercase; letter-spacing: 0.03em; }
+        .post-body img { max-width: 260px; width: 100%; border-radius: 10px; display: block; margin: 0 auto 1.5rem; box-shadow: 0 4px 14px rgba(0,0,0,0.12); }
+        .post-body .screenshot-row { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+        .post-body .screenshot-row img { flex: 1 1 200px; }
+        footer { text-align: center; padding: 2rem 1rem; font-size: 0.78rem; color: #6c757d; font-family: 'JetBrains Mono', monospace; margin-top: auto; }
+        footer a { color: #764ba2; text-decoration: none; }
+        footer a:hover { color: #bc6d11; text-decoration: underline; }
+        .post-body ul { margin-bottom: 1.25rem; padding-left: 1.3rem; }
+        .post-body li { margin-bottom: 0.4rem; }
+        .post-body .tip {
+            background: #f0edf8; border-left: 3px solid #764ba2; border-radius: 6px;
+            padding: 0.9rem 1.1rem; margin-bottom: 1.5rem; font-size: 0.97rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="site-nav">
+    <a href="../index.html">~/thoughts.log</a>
+    <span class="separator">/</span>
+    <span style="color:rgba(255,255,255,0.6);">structuring-a-maui-app</span>
+</nav>
+
+<div class="post-header">
+    <h1>Structuring a .NET MAUI App with MvvmEssentials</h1>
+    <div class="post-meta">Nov 1, 2026 &middot; Intermediate</div>
+    <div>
+        <span class="post-tag">maui</span>
+        <span class="post-tag">mvvm</span>
+        <span class="post-tag">architecture</span>
+    </div>
+</div>
+
+<hr class="post-divider">
+
+<article class="post-body">
+
+    <p>In the <a href="touring-food-delivery-app.html">last post</a> I toured a small demo app built with <a href="https://github.com/mr5z/MvvmEssentials" target="_blank">MvvmEssentials</a>. Demos are easy to keep tidy. This post is about the opposite: Reaps, a workout tracker I'm building, with around 50 screens, a free part, a paid part, and an AI coach. These are the habits that kept it from turning into a mess.</p>
+
+    <p>Quick refresher on the words I'll use:</p>
+
+    <ul>
+        <li><strong>Page</strong>: what the user sees (the XAML).</li>
+        <li><strong>View model</strong>: the plain C# class behind a page. It holds the data the page shows and the actions its buttons run. It never touches buttons or colors directly.</li>
+        <li><strong>MvvmEssentials</strong>: the library that connects the two, moves between pages, and tells each view model when things happen ("you're on screen now", "you're gone now").</li>
+    </ul>
+
+    <h2>1. One list of every screen</h2>
+
+    <p>Every page and its view model are paired once, at startup, in one place. If you want to know what screens the app has, you read one file:</p>
+
+    <pre><code class="language-csharp">registry
+    .MapPage&lt;TemplatesPage, TemplatesViewModel&gt;()
+    .MapPage&lt;SessionDetailPage, SessionDetailViewModel&gt;()
+    .MapPage&lt;SettingsPage, SettingsViewModel&gt;();
+
+// Popups: same thing, they just hand a result back.
+registry
+    .MapPage&lt;ExercisePickerPopup, ExercisePickerViewModel&gt;()
+    .MapPage&lt;ChoiceSheetPopup, ChoiceSheetViewModel&gt;();
+
+// Wizard steps: views that live inside one page.
+registry
+    .MapPage&lt;OnboardingHostPage, OnboardingHostViewModel&gt;()
+    .MapView&lt;OnboardingGoalView, OnboardingGoalViewModel&gt;()
+    .MapView&lt;OnboardingScheduleView, OnboardingScheduleViewModel&gt;();</code></pre>
+
+    <p>Group them with a short comment per group ("Setup", "Popups", "Coach"). It reads like a table of contents.</p>
+
+    <h2>2. Layers: build it like floors of a house</h2>
+
+    <p>The app is split into projects, stacked like floors. Each floor may use the floors below it, never the ones above:</p>
+
+    <pre><code class="language-text">Reaps            the app itself: XAML pages, icons, phone-specific code
+  ↑
+Reaps.Pro        paid features (AI coach, cloud backup)
+  ↑
+Reaps.Suggestions  optional smart tips on top of the logbook
+  ↑
+Reaps.Logbook    the free workout logbook: its screens and view models
+  ↑
+Reaps.Data       the database and the server client
+  ↑
+Reaps.Domain     the basics: models, text, small helpers</code></pre>
+
+    <p>Two things fall out of this for free:</p>
+
+    <ul>
+        <li><strong>The free app can't accidentally depend on the paid one.</strong> <code>Reaps.Logbook</code> simply has no reference to <code>Reaps.Pro</code>, so the compiler refuses. No code review needed to catch it.</li>
+        <li><strong>View models don't need MAUI.</strong> Only the top floor knows it's a phone app. Every view model lives in a plain .NET library, which means its tests run on any machine, in seconds, without an emulator.</li>
+    </ul>
+
+    <div class="tip">That second point is the big one. MvvmEssentials' view model base classes don't drag in the UI framework, so you can put them in a plain class library. Do it from day one; moving them later is painful.</div>
+
+    <h2>3. Folders by feature, not by kind</h2>
+
+    <p>The usual starter template gives you <code>Views/</code>, <code>ViewModels/</code>, <code>Services/</code>. That works for 5 screens. At 50, "where's the stuff for Home?" means opening three folders.</p>
+
+    <p>Instead, each feature gets a folder, and everything about it lives there:</p>
+
+    <pre><code class="language-text">Reaps.Logbook/
+  Home/
+    ViewModels/HomeViewModel.cs
+    Sections/WeekCardSection.cs
+    Sections/GoalCardSection.cs
+    IHomePrompts.cs
+  Workout/
+    ViewModels/ActiveWorkoutViewModel.cs
+    Sections/RestBarSection.cs
+  Templates/
+  History/
+  ...</code></pre>
+
+    <p>Code that no single feature owns goes in a small number of shared folders (<code>Models</code>, <code>Services</code>, <code>Text</code>). If something is used by many features but clearly belongs to one, it stays in that one.</p>
+
+    <h2>4. Plugs: how a lower floor shows things from a higher floor</h2>
+
+    <p>Here's a puzzle the layers create. The Home screen lives in the free logbook. But the paid and "Suggestions" features want to put a few things on Home: a sparkle button, a Monday check-in chip. Home isn't allowed to know those features exist.</p>
+
+    <p>The answer is a <strong>plug</strong> (an interface). Home says "I have a slot here, and whatever fills it must look like this":</p>
+
+    <pre><code class="language-csharp">// In Reaps.Logbook: the free app defines the slot.
+internal interface IHomePrompts : INotifyPropertyChanged
+{
+    bool HasCheckIn { get; }
+    IAsyncRelayCommand OpenCheckInCommand { get; }
+
+    void Show(IReadOnlyList&lt;WorkoutSession&gt; sessions, bool hasActiveWorkout);
+}</code></pre>
+
+    <p>The higher floor fills it:</p>
+
+    <pre><code class="language-csharp">// In Reaps.Suggestions: the optional feature plugs in.
+internal sealed partial class SuggestionsPromptsSection(...)
+    : SectionViewModel, IHomePrompts
+{
+    ...
+}
+
+// At startup, in the app:
+builder.Services.AddScoped&lt;IHomePrompts, SuggestionsPromptsSection&gt;();</code></pre>
+
+    <p>Home just asks for an <code>IHomePrompts</code> and binds to it. It never learns who's behind it. Rip out Suggestions, plug in an empty version, and Home still works.</p>
+
+    <h2>5. SectionViewModel: stop writing giant view models</h2>
+
+    <p>This is the part I'm happiest with.</p>
+
+    <p>A busy screen like Home has a lot going on: a "start workout" card, a "this week" card with a progress ring, a goal card, tips. If all of that goes into <code>HomeViewModel</code>, you get a 2,000-line file with 20 dependencies that nobody wants to touch.</p>
+
+    <p>A <strong>section</strong> is a small view model for <em>one part</em> of a page. Home's "This week" card is <code>WeekCardSection</code>. It has its own properties and its own dependencies, and that's all it knows about:</p>
+
+    <pre><code class="language-csharp">internal sealed partial class WeekCardSection(ISettingsStore settings, IWording wording)
+    : SectionViewModel
+{
+    public int WorkoutsThisWeek { get; private set; }
+    public int WeeklyTarget { get; private set; }
+    public double WeekFraction { get; private set; }
+
+    public void Show(HomeSummary summary, WeightUnit unit)
+    {
+        WorkoutsThisWeek = summary.WorkoutsThisWeek;
+        WeeklyTarget = _settings.DaysPerWeek;
+        WeekFraction = WeeklyTarget &lt;= 0 ? 0 : WorkoutsThisWeek / (double)WeeklyTarget;
+        ...
+    }
+}</code></pre>
+
+    <p>The page's view model just takes it in and exposes it:</p>
+
+    <pre><code class="language-csharp">internal sealed partial class HomeViewModel(..., WeekCardSection weekCard, GoalCardSection goalCard)
+    : TabViewModel
+{
+    public WeekCardSection WeekCard { get; } = weekCard;
+    public GoalCardSection GoalCard { get; } = goalCard;
+}</code></pre>
+
+    <p>And the XAML reaches into it with a dot:</p>
+
+    <pre><code class="language-markup">&lt;Label Text="{Binding WeekCard.StreakWeeks}" /&gt;
+&lt;charts:RingDrawable Fraction="{Binding WeekCard.WeekFraction}" /&gt;</code></pre>
+
+    <h2>Why not just a plain class?</h2>
+
+    <p>You could split things into plain classes yourself. What <code>SectionViewModel</code> adds is that <strong>it lives and dies with its page</strong>. You register it once:</p>
+
+    <pre><code class="language-csharp">registry
+    .RegisterSection&lt;WeekCardSection&gt;()
+    .RegisterSection&lt;RestBarSection&gt;();</code></pre>
+
+    <p>Each page that asks for one gets its own fresh copy, and when the page goes away, so does the section. If the section started something that needs stopping, it says so in <code>OnDispose</code>. The rest timer bar on the workout screen ticks four times a second; when you leave the screen, it cleans up after itself:</p>
+
+    <pre><code class="language-csharp">internal sealed partial class RestBarSection(...) : SectionViewModel
+{
+    protected override void OnDispose()
+    {
+        if (_ticker is null)
+            return;
+
+        _ticker.Tick -= HandleTick;
+        _ticker.Stop();
+        _ticker = null;
+    }
+}</code></pre>
+
+    <p>No forgotten timers ticking in the background on a screen nobody can see.</p>
+
+    <h2>Sections are easy to test</h2>
+
+    <p>A section is small, and it doesn't need MAUI (see the layers above), so testing it is just "make one, call it, check it":</p>
+
+    <pre><code class="language-csharp">[Fact]
+public void Show_FillsTheRingAgainstTheDaysPerWeek()
+{
+    _settings.DaysPerWeek = 4;
+
+    _card.Show(Summary(workouts: 3), WeightUnit.Kilograms);
+
+    Assert.Equal(0.75, _card.WeekFraction);
+}</code></pre>
+
+    <h2>6. Read everything first, then show it all at once</h2>
+
+    <p>A small trick that made the app feel much smoother.</p>
+
+    <p>Each time your code waits for something (<code>await</code>), the screen gets a chance to redraw. So if you load one card, set its values, load the next card, set its values, the user sees the page fill in piece by piece, cards jumping as others arrive.</p>
+
+    <p>The fix is a simple rule: a section that loads data has two methods.</p>
+
+    <ul>
+        <li><code>LoadAsync</code> reads the data and returns it. It changes nothing on screen.</li>
+        <li><code>Show</code> puts it on screen. It never waits for anything.</li>
+    </ul>
+
+    <p>The page loads every section first, then shows them all in a row:</p>
+
+    <pre><code class="language-csharp">private async Task ReloadAsync()
+{
+    // 1. Read. Nothing on screen changes yet.
+    var summary = await _stats.GetHomeSummaryAsync();
+    var goalCard = await GoalCard.LoadAsync(hasNoHistory, unit);
+    var hintCard = await HintCard.LoadAsync(next, sessions);
+
+    // 2. Show. No awaits from here on, so Home changes in one frame.
+    WeekCard.Show(summary, unit);
+    GoalCard.Show(goalCard);
+    HintCard.Show(hintCard);
+}</code></pre>
+
+    <p>The whole page changes in one go. No flicker, no jumping. A section that only shows what the page already read (like the week card) just has <code>Show</code>.</p>
+
+    <h2>7. Smaller things worth copying</h2>
+
+    <p><strong>Pass data between pages with real types, not strings.</strong> Mark a property as a parameter and you get a typed <code>With(...)</code> to call. Typos become compile errors:</p>
+
+    <pre><code class="language-csharp">[NavigationParameter]
+public Guid TemplateId { get; set; }
+
+// Somewhere else:
+await _navigation.NavigateAsync(TemplateDetailViewModel.With(templateId: template.Id));</code></pre>
+
+    <p><strong>Popups return an answer.</strong> Opening a picker reads like calling a method. No shared variables, no events to listen to:</p>
+
+    <pre><code class="language-csharp">var result = await _popups.PresentAsync&lt;ExercisePickerViewModel, ExercisePickerResult&gt;();
+if (!result.TryGetValue(out var picked) || picked.Selected is null)
+    return; // the user closed it without picking
+
+AddExercise(picked.Selected);</code></pre>
+
+    <p><strong>Pick the right moment to load.</strong> Every view model gets the same set of moments to hook into. The question to ask is "once, or every time?":</p>
+
+    <table>
+        <tr><th>Use</th><th>When</th><th>Good for</th></tr>
+        <tr><td><code>OnInitializedAsync</code></td><td>Once, the first time</td><td>Setting things up</td></tr>
+        <tr><td><code>OnTabSelectedAsync</code></td><td>Every time a tab is opened</td><td>Refreshing what may have changed elsewhere</td></tr>
+        <tr><td><code>OnNavigatedToAsync</code></td><td>Every time you arrive at a page</td><td>Same, for normal pages</td></tr>
+        <tr><td><code>OnDispose</code></td><td>When the page is gone</td><td>Cleaning up</td></tr>
+    </table>
+
+    <p><strong>Wizards are one page with swappable steps.</strong> Setup asks four questions. Instead of four pages, it's one host (<code>WizardHostViewModel</code>) and four step views registered with <code>MapView</code>. The host owns the answers and the Back/Next buttons; each step only knows its own question. Nothing is saved until the last step.</p>
+
+    <p><strong>Decide what a crash in a screen does.</strong> If loading a screen throws, MvvmEssentials can either crash (good while developing) or log and carry on (good for users). It's one setting, plus a hook to send the error to your logger:</p>
+
+    <pre><code class="language-csharp">opts.LifecycleExceptionBehavior = LifecycleExceptionBehavior.LogOnly;</code></pre>
+
+    <h2>8. Write the rules down, then check them</h2>
+
+    <p>Layers stop the worst mistakes, but not all of them. Inside the logbook, "Home may use Workout and Templates, but Exercises uses nothing else" is something the compiler can't see.</p>
+
+    <p>So the rules live in a plain table in the docs, one row per feature: what it's for and what it may use. A small tool reads the code, finds which feature uses which, and lists anything that breaks a rule. It sounds like a lot, but because the code is organized by feature folders (point 3), finding "who uses whom" is mostly just reading folder names.</p>
+
+    <h2>Cheat sheet</h2>
+
+    <ul>
+        <li>Register every screen in one place, grouped with comments.</li>
+        <li>Stack your projects in layers. Only the top one knows about MAUI.</li>
+        <li>Put view models in plain libraries so tests run anywhere.</li>
+        <li>Organize folders by feature, not by kind of file.</li>
+        <li>When a lower layer needs something from a higher one, give it a plug (an interface) and let the higher layer fill it.</li>
+        <li>Split busy screens into sections. Let them live and die with their page.</li>
+        <li>Load everything first, then show everything at once.</li>
+        <li>Use typed parameters and popups that return answers.</li>
+    </ul>
+
+    <p>None of this is clever on its own. It's mostly about making the easy thing and the right thing the same thing. MvvmEssentials is on <a href="https://github.com/mr5z/MvvmEssentials" target="_blank">GitHub</a> and NuGet as <code>Nkraft.MvvmEssentials</code>.</p>
+
+</article>
+
+<footer>
+    <p>Content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+</body>
+</html>
